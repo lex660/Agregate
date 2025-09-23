@@ -7,9 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
-
-    <!-- === 1. ANALYTICS SETUP === -->
-    <!-- Yandex.Metrica counter -->
+    
     <script type="text/javascript" >
       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
       m[i].l=1*new Date();
@@ -17,28 +15,15 @@
       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-      // !!! ЗАМЕНИТЕ НА ID ВАШЕГО СЧЕТЧИКА !!!
-      const ymCounterId = "104236934";
+      const ymCounterId = "104202450"; 
       ym(ymCounterId, "init", {
           clickmap:true,
           trackLinks:true,
-          accurateTrackBounce:true,
-          webvisor:true
+          accurateTrackBounce:true
       });
     </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/104236934" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-
-    <!-- Google tag (gtag.js) -->
-    <!-- !!! ЗАМЕНИТЕ G-XXXXXXXXXX НА ID ВАШЕГО СЧЕТЧИКА !!! -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
-    </script>
-    <!-- === END ANALYTICS SETUP === -->
-
+    <noscript><div><img src="https://mc.yandex.ru/watch/104202450" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    
     <style>
         :root {
             --primary-color: #10B981;
@@ -51,227 +36,125 @@
             --border-radius: 12px;
             --box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Manrope', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            margin: 1rem;
-        }
-        main {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-        /* Card Styles */
-        .card {
-            background-color: var(--card-background-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 1.5rem;
-        }
-        .card h2 { margin-top: 0; text-align: center; }
-        /* Form Styles */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-        .form-group { margin-bottom: 0; }
-        .form-group.full-width { grid-column: 1 / -1; }
-        .form-group label { display: block; font-weight: 700; margin-bottom: 0.5rem; }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-        .calculate-btn {
-            width: 100%; padding: 1rem; background-color: var(--primary-color);
-            color: white; border: none; border-radius: 8px;
-            font-size: 1.125rem; font-weight: 700; cursor: pointer;
-            transition: background-color 0.3s ease; grid-column: 1 / -1;
-        }
-        .calculate-btn:hover { background-color: var(--primary-hover-color); }
-        
-        /* === 2. DISCLAIMER STYLES === */
-        .disclaimer {
-            font-size: 0.9rem; color: var(--text-light-color);
-            text-align: center; margin: 1.5rem 0 0 0;
-            padding: 1rem; background-color: #f0fdf4;
-            border-radius: 8px; border: 1px solid #bbf7d0;
-        }
 
-        /* === 3. RESPONSIVE RESULTS STYLES (MOBILE CARDS, DESKTOP TABLE) === */
-        #results-section { transition: opacity 0.5s ease; }
-        .results-container { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-        .result-card {
-            border: 1px solid var(--border-color);
-            border-radius: 8px; padding: 1rem;
-        }
-        .result-card-header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 1rem;
-        }
-        .result-card-header h3 { margin: 0; font-size: 1.2rem; }
-        .result-card-body {
-            display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem; font-size: 0.9rem;
-        }
-        .result-card-body div {
-            display: flex; flex-direction: column;
-        }
-        .result-card-body .label { color: var(--text-light-color); }
-        .result-card-body .value { font-weight: 700; font-size: 1rem; }
-        .result-card .bank-note {
-            font-size: 0.8rem; color: var(--text-light-color);
-            margin-top: 0.5rem; grid-column: 1 / -1;
-        }
-        .apply-btn {
-            width: 100%; padding: 0.75rem; margin-top: 1rem;
-            background-color: var(--primary-color); color: white;
-            border: none; border-radius: 8px; font-size: 1rem;
-            font-weight: 700; cursor: pointer; transition: background-color 0.3s ease;
-        }
-        .apply-btn:hover { background-color: var(--primary-hover-color); }
-        .results-table-container { display: none; } /* Hidden on mobile */
-        
-        /* Desktop styles */
-        @media (min-width: 768px) {
-            main {
-                grid-template-columns: 400px 1fr;
-                align-items: flex-start;
-            }
-            .form-grid { grid-template-columns: 1fr; }
-            .results-container { display: none; } /* Hide cards on desktop */
-            .results-table-container { display: block; } /* Show table on desktop */
-            .results-table {
-                width: 100%; border-collapse: collapse;
-            }
-            .results-table th, .results-table td {
-                padding: 0.75rem; text-align: left;
-                border-bottom: 1px solid var(--border-color);
-                vertical-align: middle;
-            }
-            .results-table th { color: var(--text-light-color); }
-            .results-table .bank-name-cell { font-weight: 700; }
-            .results-table .bank-note {
-                display: block; font-size: 0.8rem;
-                color: var(--text-light-color); font-weight: 400;
-            }
-        }
-        
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); display: flex;
-            justify-content: center; align-items: center; z-index: 1000;
-            opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Manrope', sans-serif; background-color: var(--background-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.6; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 2rem; box-sizing: border-box; }
+        .header-section { text-align: center; margin-bottom: 2rem; }
+        .header-section h1 { font-size: 2.25rem; margin: 0 0 0.5rem 0; }
+        .header-section p { font-size: 1.125rem; color: var(--text-light-color); max-width: 650px; margin: 0 auto; }
+        .main-layout { display: grid; grid-template-columns: 350px 1fr; gap: 2rem; align-items: flex-start; }
+        .card { background-color: var(--card-background-color); border-radius: var(--border-radius); box-shadow: var(--box-shadow); padding: 2rem; }
+        .card h2 { margin-top: 0; margin-bottom: 1.5rem; text-align: center; font-size: 1.5rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
+        .calculate-btn, .apply-btn, .submit-btn { width: 100%; padding: 1rem; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 1.125rem; font-weight: 700; cursor: pointer; transition: background-color 0.3s ease; text-align: center; text-decoration: none; display: inline-block; }
+        .calculate-btn:hover, .apply-btn:hover, .submit-btn:hover { background-color: var(--primary-hover-color); }
+        .apply-btn { font-size: 0.9rem; padding: 0.75rem 1rem; }
+        #results-container .placeholder { text-align: center; color: var(--text-light-color); padding: 3rem 1rem; border: 2px dashed var(--border-color); border-radius: var(--border-radius); }
+        .table-wrapper { overflow-x: auto; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .results-table th, .results-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .results-table .bank-name-cell { font-weight: 700; }
+        .results-table .bank-note { display: block; font-size: 0.8rem; color: var(--text-light-color); font-weight: 400; }
+        .results-table th { font-weight: 700; color: var(--text-light-color); font-size: 0.8rem; text-transform: uppercase; }
+        .results-table tr:last-child td { border-bottom: none; }
+        .disclaimer { font-size: 0.875rem; color: var(--text-light-color); text-align: center; margin-top: 1.5rem; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content {
-            background-color: var(--card-background-color); padding: 2rem;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            width: 90%; max-width: 500px; position: relative;
-        }
-        .modal-close {
-            position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem;
-            font-weight: bold; color: var(--text-light-color);
-            cursor: pointer; border: none; background: none;
-        }
+        .modal-content { background-color: var(--card-background-color); padding: 2rem; border-radius: var(--border-radius); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); width: 90%; max-width: 500px; position: relative; }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; font-weight: bold; color: var(--text-light-color); cursor: pointer; border: none; background: none; }
+        footer { text-align: center; padding: 2rem; margin-top: 2rem; color: var(--text-light-color); font-size: 0.9rem; }
         .hidden { display: none; }
+        @media (max-width: 820px) { .main-layout { grid-template-columns: 1fr; } .container { padding: 1rem; } }
+        @media (max-width: 600px) {
+            .header-section h1 { font-size: 1.8rem; }
+            .header-section p { font-size: 1rem; }
+            .card { padding: 1.5rem; }
+            .table-wrapper { overflow-x: hidden; }
+            .results-table { min-width: unset; border: 0; }
+            .results-table thead { border: none; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+            .results-table tr { display: block; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1rem; box-shadow: none; }
+            .results-table td { display: flex; justify-content: space-between; align-items: center; text-align: right; font-size: 0.9rem; border-bottom: 1px solid var(--border-color); padding: 0.75rem 0.25rem; }
+            .results-table td:last-child { border-bottom: 0; display: block; padding-top: 1rem; }
+            .results-table td::before { content: attr(data-label); font-weight: 700; text-align: left; padding-right: 1rem; }
+            .results-table td.bank-name-cell { display: block; font-size: 1.25rem; text-align: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem; }
+            .results-table td.bank-name-cell::before { display: none; }
+            .results-table .apply-btn { width: 100%; }
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <main>
+        <header class="header-section">
+            <h1>Калькулятор исламской рассрочки</h1>
+            <p>Сравните условия от разных банков и выберите лучшее предложение. Просто, быстро и без скрытых комиссий.</p>
+        </header>
+
+        <main class="main-layout">
             <section id="calculator-section" class="card">
-                <h2>Рассчитайте свою рассрочку</h2>
+                <h2>Параметры расчета</h2>
                 <form id="calculator-form" aria-label="Форма калькулятора рассрочки">
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label for="region">Регион</label>
-                            <select id="region" name="region" required>
-                                <option value="Ingushetia">Ингушетия</option>
-                                <option value="Dagestan">Дагестан</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="product-price">Стоимость товара (₽)</label>
-                            <input type="number" id="product-price" placeholder="500000" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="down-payment">Первый взнос (₽)</label>
-                            <input type="number" id="down-payment" placeholder="100000" required>
-                        </div>
-                         <div class="form-group full-width">
-                            <label for="term">Срок (месяцев)</label>
-                            <select id="term" name="term" required>
-                                <option value="3">3 месяца</option>
-                                <option value="6" selected>6 месяцев</option>
-                                <option value="9">9 месяцев</option>
-                                <option value="12">12 месяцев</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="calculate-btn">Рассчитать</button>
+                    <div class="form-group">
+                        <label for="region">Регион</label>
+                        <select id="region" name="region" required>
+                            <option value="Ingushetia">Ингушетия</option>
+                            <option value="Dagestan">Дагестан</option>
+                        </select>
                     </div>
+                    <div class="form-group">
+                        <label for="product-price">Стоимость товара (₽)</label>
+                        <input type="number" id="product-price" name="product-price" placeholder="Например, 500000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="down-payment">Первоначальный взнос (₽)</label>
+                        <input type="number" id="down-payment" name="down-payment" placeholder="Например, 100000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="term">Срок (месяцев)</label>
+                        <select id="term" name="term" required>
+                            <option value="2">2 месяца</option>
+                            <option value="3">3 месяца</option>
+                            <option value="4">4 месяца</option>
+                            <option value="5">5 месяцев</option>
+                            <option value="6" selected>6 месяцев</option>
+                            <option value="7">7 месяцев</option>
+                            <option value="8">8 месяцев</option>
+                            <option value="9">9 месяцев</option>
+                            <option value="10">10 месяцев</option>
+                            <option value="11">11 месяцев</option>
+                            <option value="12">12 месяцев</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="calculate-btn">Рассчитать</button>
                 </form>
             </section>
 
-            <section id="results-section" class="card hidden">
+            <section id="results-section" class="card">
                 <h2>Сравнение предложений</h2>
-                
-                <!-- Mobile Card View -->
-                <div id="results-cards" class="results-container"></div>
-                
-                <!-- Desktop Table View -->
-                <div class="results-table-container">
-                    <table class="results-table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Компания</th>
-                                <th scope="col">Наценка (₽)</th>
-                                <th scope="col">Итого (₽)</th>
-                                <th scope="col">В месяц (₽)</th>
-                                <th scope="col">Действие</th>
-                            </tr>
-                        </thead>
-                        <tbody id="results-body"></tbody>
-                    </table>
-                </div>
-                
-                <!-- Disclaimer After Calculation -->
-                <div id="calc-disclaimer" class="disclaimer hidden">
-                    💡 Расчеты являются приблизительными. Финальные условия подтверждаются при оформлении. Вы уже можете подать заявку, и мы поможем подобрать лучшее предложение.
+                <div id="results-container">
+                     <div class="placeholder">
+                        <p>Введите данные в калькулятор, чтобы увидеть здесь сравнение предложений.</p>
+                     </div>
                 </div>
             </section>
         </main>
+        
+        <footer>
+            <p>© 2024 Your Company</p>
+        </footer>
     </div>
     
-    <!-- Application Modal -->
     <div id="application-modal" class="modal-overlay">
         <div class="modal-content">
             <button id="modal-close-btn" class="modal-close" aria-label="Закрыть модальное окно">&times;</button>
-            <h2>Заявка на рассрочку</h2>
             
             <form id="google-form" action="https://docs.google.com/forms/d/e/1FAIpQLSetrQI4QWortTrSFRevYywlZjYJlw6Qolmfqrkt_hcZuz_6DQ/formResponse" method="POST" target="hidden_iframe">
                 <div id="form-inputs">
-                    <!-- === 4. NEW & HIDDEN FORM FIELDS === -->
+                    <h2>Заявка на рассрочку</h2>
                     <div class="form-group">
                         <label for="modal-name">Имя</label>
                         <input type="text" id="modal-name" name="entry.403278400" required>
@@ -280,39 +163,34 @@
                         <label for="modal-phone">Телефон</label>
                         <input type="tel" id="modal-phone" name="entry.306095172" required>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="modal-email">Электронная почта</label>
                         <input type="email" id="modal-email" name="entry.1166816010" required>
                     </div>
                     <div class="form-group">
-                        <label for="product-name">Наименование товара</label>
-                        <input type="text" id="product-name" name="entry.1432420336" required>
+                        <label for="product-name-input-visible">Название товара</label>
+                        <input type="text" id="product-name-input-visible" name="entry.1758070087" required>
                     </div>
                     <div class="form-group">
-                        <label for="product-link">Ссылка на товар (необязательно)</label>
-                        <input type="url" id="product-link" name="entry.946132038">
+                        <label for="product-link-input-visible">Ссылка на товар (необязательно)</label>
+                        <input type="url" id="product-link-input-visible" name="entry.1720974032">
                     </div>
-
-                    <!-- Hidden fields with CORRECTED entry IDs -->
-                    <input type="hidden" id="bank-name-input" name="entry.1726191390">
-                    <input type="hidden" id="price-input" name="entry.1118335032">
-                    <input type="hidden" id="downpayment-input" name="entry.2001556942">
-                    <input type="hidden" id="term-input" name="entry.339235948">
-                    <input type="hidden" id="markup-input" name="entry.1491834271">
-                    <input type="hidden" id="totalcost-input" name="entry.1843343389">
-                    <input type="hidden" id="monthly-input" name="entry.845452243">
-                    <!-- === END NEW FIELDS === -->
-
-                    <button type="submit" class="calculate-btn">Отправить заявку</button>
+                    
+                    <input type="hidden" id="bank-name-input" name="entry.1726191390" value="">
+                    <input type="hidden" id="calc-price-input" name="entry.981090326" value="">
+                    <input type="hidden" id="calc-downpayment-input" name="entry.1417851249" value="">
+                    <input type="hidden" id="calc-term-input" name="entry.1511281631" value="">
+                    <input type="hidden" id="res-markup-input" name="entry.926945918" value="">
+                    <input type="hidden" id="res-total-input" name="entry.524351229" value="">
+                    <input type="hidden" id="res-monthly-input" name="entry.63595873" value="">
+                    
+                    <button type="submit" class="submit-btn">Отправить заявку</button>
                 </div>
             </form>
             <div id="form-success-message" class="hidden" style="text-align: center;">
                 <h3>Спасибо!</h3>
                 <p>Ваша заявка успешно отправлена. Мы скоро с вами свяжемся.</p>
-                <!-- Disclaimer After Application -->
-                <div class="disclaimer">
-                    💡 Наш проект находится в стадии разработки. Мы уже обрабатываем вашу заявку, чтобы найти лучшие условия для вас.
-                </div>
+                <p class="disclaimer" style="margin-top: 1rem;">💡 Напоминаем, что расчеты являются предварительными. Мы свяжемся с вами для подтверждения окончательных условий.</p>
             </div>
         </div>
     </div>
@@ -321,187 +199,290 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Form & Modal Elements ---
+            // DOM Elements
             const form = document.getElementById('calculator-form');
-            const resultsSection = document.getElementById('results-section');
-            const resultsBody = document.getElementById('results-body');
-            const resultsCards = document.getElementById('results-cards');
-            const calcDisclaimer = document.getElementById('calc-disclaimer');
+            const resultsContainer = document.getElementById('results-container');
             const modal = document.getElementById('application-modal');
             const modalCloseBtn = document.getElementById('modal-close-btn');
             const googleForm = document.getElementById('google-form');
             const formInputs = document.getElementById('form-inputs');
             const formSuccessMessage = document.getElementById('form-success-message');
-
-            // --- Calculation Logic for Each Bank ---
-            const calculateAlBaraka = (price, downPayment, term) => {
-                const TERM_MARKUP_RATES = { 3: 0.06, 6: 0.12, 9: 0.181, 12: 0.242 };
-                const FIXED_DOWN_PAYMENT_RATE = 0.25;
-                const requiredDownPayment = price * FIXED_DOWN_PAYMENT_RATE;
-                const financedAmount = price - requiredDownPayment;
-                const markupRate = TERM_MARKUP_RATES[term] || 0;
-                const markupValue = price * markupRate;
-                const totalPayout = financedAmount + markupValue;
-                const monthlyPayment = Math.ceil(totalPayout / term);
-                return { name: 'Al-Baraka ("Идеал")', cleanName: 'Al-Baraka', markup: markupValue, totalCost: price + markupValue, monthlyPayment: monthlyPayment, note: `Фикс. взнос 25% (${requiredDownPayment.toLocaleString('ru-RU')} ₽)`};
-            };
-            const calculateTasnim = (price, downPayment, term) => {
-                const MARKUP_RATE = 0.075;
-                const financedAmount = price - downPayment;
-                const totalPayout = financedAmount * (1 + MARKUP_RATE);
-                return { name: 'Tasnim', cleanName: 'Tasnim', markup: financedAmount * MARKUP_RATE, totalCost: downPayment + totalPayout, monthlyPayment: Math.ceil(totalPayout / term) };
-            };
-            const calculateSahih = (price, downPayment, term) => {
-                const MARKUP_RATE = 0.125;
-                const financedAmount = price - downPayment;
-                const totalPayout = financedAmount * (1 + MARKUP_RATE);
-                return { name: 'ФинЛайт (сахих.рф)', cleanName: 'FinLight', markup: financedAmount * MARKUP_RATE, totalCost: downPayment + totalPayout, monthlyPayment: Math.ceil(totalPayout / term) };
-            };
-            const calculateLaRiba = (price, downPayment, term) => {
-                const MARKUP_RATE = 0.15;
-                const financedAmount = price - downPayment;
-                const totalPayout = financedAmount * (1 + MARKUP_RATE);
-                return { name: 'LaRiba', cleanName: 'LaRiba', markup: financedAmount * MARKUP_RATE, totalCost: downPayment + totalPayout, monthlyPayment: Math.ceil(totalPayout / term) };
-            };
-            const calculateRisalat = (price, downPayment, term) => {
-                const TERM_MARKUP_RATES = { 3: 0.13, 6: 0.214, 9: 0.319444, 12: 0.4216 };
-                const financedAmount = price - downPayment;
-                const markupRate = TERM_MARKUP_RATES[term] || 0;
-                const markupValue = financedAmount * markupRate;
-                const totalPayout = financedAmount + markupValue;
-                return { name: 'Рисалат', cleanName: 'Risalat', markup: markupValue, totalCost: downPayment + totalPayout, monthlyPayment: Math.ceil(totalPayout / term) };
-            };
-
-            const allBanks = [
-                { region: 'Ingushetia', calculate: calculateAlBaraka },
-                { region: 'Ingushetia', calculate: calculateTasnim },
-                { region: 'Ingushetia', calculate: calculateSahih },
-                { region: 'Dagestan', calculate: calculateLaRiba },
-                { region: 'Dagestan', calculate: calculateRisalat }
-            ];
             
-            let lastResults = []; // Store the last calculated results
+            // State variables
+            let lastCalculationInputs = {};
+            
+            // --- Calculation Logic for Each Bank ---
+            const banks = [
+                {
+                    name: 'Al-Baraka',
+                    region: 'Ingushetia',
+                    calculate: (price, downPayment, term) => {
+                        const MAX_PRICE = 300000;
+                        const MIN_DOWN_PAYMENT_RATE = 0.25;
+                        const TERM_MARKUP_RATES = { 3: 0.06, 6: 0.12, 9: 0.181, 12: 0.242 };
 
-            // --- Main Form Submission ---
+                        if (price > MAX_PRICE || downPayment < (price * MIN_DOWN_PAYMENT_RATE) || !TERM_MARKUP_RATES[term]) {
+                            return null;
+                        }
+
+                        const financedAmount = price - downPayment;
+                        const markupValue = financedAmount * TERM_MARKUP_RATES[term];
+                        const totalPayout = financedAmount + markupValue;
+                        const monthlyPayment = totalPayout / term;
+                        
+                        return {
+                            markup: markupValue,
+                            totalCost: price + markupValue,
+                            monthlyPayment: monthlyPayment,
+                            note: `Макс. сумма 300т, мин. взнос 25%`
+                        };
+                    }
+                },
+                {
+                    name: 'Tasnim',
+                    region: 'Ingushetia',
+                    calculate: (price, downPayment, term) => {
+                        const MARKUP_RATE = 0.075;
+                        const financedAmount = price - downPayment;
+                        const markupValue = financedAmount * MARKUP_RATE;
+                        const totalPayout = financedAmount + markupValue;
+                        const monthlyPayment = totalPayout / term;
+                        
+                        return {
+                            markup: markupValue,
+                            totalCost: downPayment + totalPayout,
+                            monthlyPayment: monthlyPayment
+                        };
+                    }
+                },
+                {
+                    name: 'ФинЛайт',
+                    region: 'Ingushetia',
+                    calculate: (price, downPayment, term) => {
+                        const MAX_PRICE = 300000;
+                        const MAX_TERM = 9;
+                        const MIN_DOWN_PAYMENT_RATE = 0.25;
+                        const MARKUP_RATE = 0.125;
+
+                        if (price > MAX_PRICE || term > MAX_TERM || downPayment < (price * MIN_DOWN_PAYMENT_RATE)) {
+                            return null;
+                        }
+
+                        const financedAmount = price - downPayment;
+                        const markupValue = financedAmount * MARKUP_RATE;
+                        const totalPayout = financedAmount + markupValue;
+                        const monthlyPayment = totalPayout / term;
+
+                        return {
+                            markup: markupValue,
+                            totalCost: downPayment + totalPayout,
+                            monthlyPayment: monthlyPayment,
+                            note: 'Макс. сумма 300т, макс. срок 9 мес., мин. взнос 25%'
+                        };
+                    }
+                },
+                {
+                    name: 'LaRiba',
+                    region: 'Dagestan',
+                    calculate: (price, downPayment, term) => {
+                        const MARKUP_RATE = 0.15;
+                        const financedAmount = price - downPayment;
+                        const markupValue = financedAmount * MARKUP_RATE;
+                        const totalPayout = financedAmount + markupValue;
+                        const monthlyPayment = totalPayout / term;
+
+                        return {
+                            markup: markupValue,
+                            totalCost: downPayment + totalPayout,
+                            monthlyPayment: monthlyPayment
+                        };
+                    }
+                },
+                {
+                    name: 'Vatan',
+                    region: 'Dagestan',
+                    calculate: (price, downPayment, term) => {
+                        const TERM_MARKUP_RATES = { 3: 0.13, 6: 0.214, 9: 0.319444, 12: 0.4216 };
+                        if (!TERM_MARKUP_RATES[term]) return null;
+
+                        const financedAmount = price - downPayment;
+                        const markupValue = financedAmount * TERM_MARKUP_RATES[term];
+                        const totalPayout = financedAmount + markupValue;
+                        const monthlyPayment = totalPayout / term;
+                        
+                        return {
+                            markup: markupValue,
+                            totalCost: downPayment + totalPayout,
+                            monthlyPayment: monthlyPayment
+                        };
+                    }
+                }
+            ];
+
+            // --- Main Event Listeners ---
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
+
                 const region = document.getElementById('region').value;
                 const productPrice = parseFloat(document.getElementById('product-price').value);
                 const downPayment = parseFloat(document.getElementById('down-payment').value);
                 const term = parseInt(document.getElementById('term').value, 10);
 
-                if (isNaN(productPrice) || productPrice <= 0 || isNaN(downPayment) || downPayment < 0 || downPayment >= productPrice) {
-                    alert('Пожалуйста, введите корректные данные.');
+                if (isNaN(productPrice) || productPrice <= 0) {
+                    alert('Пожалуйста, введите корректную стоимость товара.');
                     return;
                 }
+                if (isNaN(downPayment) || downPayment < 0) {
+                    alert('Пожалуйста, введите корректный первоначальный взнос.');
+                    return;
+                }
+                if (downPayment >= productPrice) {
+                    alert('Первоначальный взнос не может быть больше или равен стоимости товара.');
+                    return;
+                }
+                
+                lastCalculationInputs = { productPrice, downPayment, term };
 
-                const filteredBanks = allBanks.filter(bank => bank.region === region);
-                lastResults = filteredBanks.map(bank => bank.calculate(productPrice, downPayment, term));
+                const results = banks
+                    .filter(bank => bank.region === region)
+                    .map(bank => {
+                        const calculatedData = bank.calculate(productPrice, downPayment, term);
+                        return calculatedData ? { ...bank, ...calculatedData } : null;
+                    })
+                    .filter(Boolean); // Filter out null results
                 
-                displayResults(lastResults);
+                displayResults(results);
                 
-                // --- Analytics Event for Calculation ---
-                const eventParams = { productPrice, downPayment, term, region };
-                if (typeof ym === 'function') ym(ymCounterId, 'reachGoal', 'calculate_click', eventParams);
-                if (typeof gtag === 'function') gtag('event', 'calculate_click', eventParams);
+                if (typeof ym === 'function') {
+                    ym(ymCounterId, 'reachGoal', 'calculate_button_click', {
+                        price: productPrice,
+                        down_payment: downPayment,
+                        term: term,
+                        region: region
+                    });
+                }
             });
             
             function displayResults(results) {
-                resultsBody.innerHTML = '';
-                resultsCards.innerHTML = '';
                 const formatCurrency = (value) => Math.round(value).toLocaleString('ru-RU');
 
-                results.forEach(result => {
-                    const noteHtml = result.note ? `<span class="bank-note">*${result.note}</span>` : '';
-                    
-                    // Populate Desktop Table
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="bank-name-cell">${result.name}${noteHtml}</td>
-                        <td>${formatCurrency(result.markup)}</td>
-                        <td>${formatCurrency(result.totalCost)}</td>
-                        <td>${formatCurrency(result.monthlyPayment)}</td>
-                        <td><button class="apply-btn" data-bank-name="${result.cleanName}">Подать заявку</button></td>
-                    `;
-                    resultsBody.appendChild(row);
-
-                    // Populate Mobile Cards
-                    const card = document.createElement('div');
-                    card.className = 'result-card';
-                    card.innerHTML = `
-                        <div class="result-card-header">
-                            <h3>${result.name}</h3>
-                        </div>
-                        <div class="result-card-body">
-                            <div><span class="label">Наценка</span><span class="value">${formatCurrency(result.markup)} ₽</span></div>
-                            <div><span class="label">В месяц</span><span class="value">${formatCurrency(result.monthlyPayment)} ₽</span></div>
-                            <div><span class="label">Итого</span><span class="value">${formatCurrency(result.totalCost)} ₽</span></div>
-                        </div>
-                        ${noteHtml ? `<div class="bank-note">*${result.note}</div>` : ''}
-                        <button class="apply-btn" data-bank-name="${result.cleanName}">Подать заявку</button>
-                    `;
-                    resultsCards.appendChild(card);
-                });
+                if (results.length === 0) {
+                    resultsContainer.innerHTML = `
+                        <div class="placeholder">
+                            <p>Нет доступных предложений для указанных параметров. Попробуйте изменить условия.</p>
+                        </div>`;
+                    return;
+                }
                 
-                resultsSection.classList.remove('hidden');
-                calcDisclaimer.classList.remove('hidden');
-                resultsSection.scrollIntoView({ behavior: 'smooth' });
+                const tableContent = `
+                    <div class="table-wrapper">
+                        <table class="results-table" aria-live="polite">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Компания</th>
+                                    <th scope="col">Наценка (₽)</th>
+                                    <th scope="col">Итого (₽)</th>
+                                    <th scope="col">В месяц (₽)</th>
+                                    <th scope="col">Действие</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${results.map(result => {
+                                    const noteHtml = result.note ? `<span class="bank-note">${result.note}</span>` : '';
+                                    return `
+                                    <tr>
+                                        <td data-label="Компания" class="bank-name-cell">${result.name}${noteHtml}</td>
+                                        <td data-label="Наценка (₽)">${formatCurrency(result.markup)}</td>
+                                        <td data-label="Итого (₽)">${formatCurrency(result.totalCost)}</td>
+                                        <td data-label="В месяц (₽)">${formatCurrency(result.monthlyPayment)}</td>
+                                        <td data-label="Действие">
+                                            <button class="apply-btn" 
+                                                    data-bank-name="${result.name}"
+                                                    data-markup="${result.markup}"
+                                                    data-total-cost="${result.totalCost}"
+                                                    data-monthly-payment="${result.monthlyPayment}">
+                                                Подать заявку
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="disclaimer">💡 Расчеты являются предварительными. Финальные условия подтверждаются при подаче заявки.</p>
+                `;
+                resultsContainer.innerHTML = tableContent;
             }
             
-            // --- Event Delegation for "Apply" Buttons ---
-            resultsSection.addEventListener('click', (event) => {
+            // --- Modal and Form Submission Logic ---
+            resultsContainer.addEventListener('click', (event) => {
                 if (event.target.classList.contains('apply-btn')) {
-                    const bankName = event.target.getAttribute('data-bank-name');
-                    openModal(bankName);
+                    const button = event.target;
+                    const bankName = button.getAttribute('data-bank-name');
+                    const resultData = {
+                        markup: button.getAttribute('data-markup'),
+                        totalCost: button.getAttribute('data-total-cost'),
+                        monthlyPayment: button.getAttribute('data-monthly-payment'),
+                    };
+                    openModal(bankName, resultData);
                 }
             });
             
-            function openModal(bankName) {
-                const productPrice = parseFloat(document.getElementById('product-price').value);
-                const downPayment = parseFloat(document.getElementById('down-payment').value);
-                const term = parseInt(document.getElementById('term').value, 10);
-                const selectedResult = lastResults.find(r => r.cleanName === bankName);
-
-                if (!selectedResult) return;
-
-                // --- Populate Hidden Fields in Modal Form ---
-                document.getElementById('bank-name-input').value = selectedResult.cleanName;
-                document.getElementById('price-input').value = productPrice;
-                document.getElementById('downpayment-input').value = downPayment;
-                document.getElementById('term-input').value = term;
-                document.getElementById('markup-input').value = Math.round(selectedResult.markup);
-                document.getElementById('totalcost-input').value = Math.round(selectedResult.totalCost);
-                document.getElementById('monthly-input').value = Math.round(selectedResult.monthlyPayment);
-                
-                modal.classList.add('active');
-                
-                // --- Analytics Event for Application Click ---
-                const eventParams = { productPrice, downPayment, term, bankName };
-                if (typeof ym === 'function') ym(ymCounterId, 'reachGoal', 'apply_click', eventParams);
-                if (typeof gtag === 'function') gtag('event', 'apply_click', eventParams);
-            }
-
-            // --- Google Form Submission & Modal Close Logic ---
             googleForm.addEventListener('submit', () => {
                 setTimeout(() => {
                     formInputs.classList.add('hidden');
                     formSuccessMessage.classList.remove('hidden');
                 }, 100);
+
+                 if (typeof ym === 'function') {
+                    ym(ymCounterId, 'reachGoal', 'application_sent', {
+                        bank: document.getElementById('bank-name-input').value,
+                        price: lastCalculationInputs.productPrice,
+                        down_payment: lastCalculationInputs.downPayment,
+                        term: lastCalculationInputs.term
+                    });
+                }
             });
             
+            function resetModalForm() {
+                formInputs.classList.remove('hidden');
+                formSuccessMessage.classList.add('hidden');
+                googleForm.reset();
+            }
+
+            function openModal(bankName, resultData) {
+                resetModalForm();
+                
+                document.getElementById('bank-name-input').value = bankName;
+                document.getElementById('calc-price-input').value = lastCalculationInputs.productPrice;
+                document.getElementById('calc-downpayment-input').value = lastCalculationInputs.downPayment;
+                document.getElementById('calc-term-input').value = lastCalculationInputs.term;
+                document.getElementById('res-markup-input').value = Math.round(parseFloat(resultData.markup));
+                document.getElementById('res-total-input').value = Math.round(parseFloat(resultData.totalCost));
+                document.getElementById('res-monthly-input').value = Math.round(parseFloat(resultData.monthlyPayment));
+
+                modal.classList.add('active');
+                
+                if (typeof ym === 'function') {
+                    ym(ymCounterId, 'reachGoal', 'apply_button_click', { 
+                        bank: bankName,
+                        price: lastCalculationInputs.productPrice,
+                        down_payment: lastCalculationInputs.downPayment,
+                        term: lastCalculationInputs.term
+                    });
+                }
+            }
+
             function closeModal() {
                 modal.classList.remove('active');
-                // Reset form state after a short delay
-                setTimeout(() => {
-                    formInputs.classList.remove('hidden');
-                    formSuccessMessage.classList.add('hidden');
-                    googleForm.reset();
-                }, 300);
             }
 
             modalCloseBtn.addEventListener('click', closeModal);
             modal.addEventListener('click', (event) => {
-                if (event.target === modal) closeModal();
+                if (event.target === modal) {
+                    closeModal();
+                }
             });
         });
     </script>
