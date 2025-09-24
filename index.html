@@ -16,6 +16,8 @@
             for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
             k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
         })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104202450', 'ym');
+        const ymCounterId = 104202450;
+
 
         ym(104202450, 'init', {
             webvisor:true,
@@ -355,7 +357,6 @@
                     .filter(Boolean); // Filter out null results
                 
                 displayResults(results);
-                const ymCounterId = 104202450;
 
                 
                 if (typeof ym === 'function') {
