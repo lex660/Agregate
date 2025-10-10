@@ -1,165 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
+    // ============================================
+    // КОНФИГУРАЦИЯ
+    // ============================================
+    
+    // ВАЖНО: Замените этот URL на URL вашего Cloudflare Worker
+    const CLOUDFLARE_WORKER_URL = 'https://islamic-installment-api.sasun-smbatyan.workers.dev';
+    
+    // DOM элементы
     const form = document.getElementById('calculator-form');
     const resultsContainer = document.getElementById('results-container');
-
-    // State variables
+    
+    // Переменные состояния
     let lastCalculationInputs = {};
+    let isLoading = false;
 
-    // Track page visit
+    // ============================================
+    // АНАЛИТИКА
+    // ============================================
+    
+    // Отслеживание посещения страницы
     if (typeof ym === 'function') {
         ym(ymCounterId, 'reachGoal', 'visit');
     }
 
-    // --- Calculation Logic for Each Bank ---
-    const banks = [
-        {
-            name: 'Tasnim',
-            url: 'https://tasnim.ing/',
-            region: 'Ingushetia',
-            calculate: (price, downPayment, term) => {
-                const MARKUP_RATE = 0.075;
-                const financedAmount = price - downPayment;
-                const markupValue = financedAmount * MARKUP_RATE;
-                const totalPayout = financedAmount + markupValue;
-                const monthlyPayment = totalPayout / term;
-
-                return {
-                    markup: markupValue,
-                    totalCost: downPayment + totalPayout,
-                    monthlyPayment: monthlyPayment
-                };
-            }
-        },
-        {
-            name: 'ФинЛайт',
-            url: 'https://финлайт.рф/',
-            region: 'Ingushetia',
-            calculate: (price, downPayment, term) => {
-                const MAX_PRICE = 300000;
-                const MAX_TERM = 9;
-                const MIN_DOWN_PAYMENT_RATE = 0.25;
-                const MARKUP_RATE = 0.125;
-
-                if (price > MAX_PRICE || term > MAX_TERM || downPayment < (price * MIN_DOWN_PAYMENT_RATE)) {
-                    return null;
-                }
-
-                const financedAmount = price - downPayment;
-                const markupValue = financedAmount * MARKUP_RATE;
-                const totalPayout = financedAmount + markupValue;
-                const monthlyPayment = totalPayout / term;
-
-                return {
-                    markup: markupValue,
-                    totalCost: downPayment + totalPayout,
-                    monthlyPayment: monthlyPayment,
-                    note: 'Макс. сумма 300т, макс. срок 9 мес., мин. взнос 25%'
-                };
-            }
-        },
-        {
-            name: 'Kupitak',
-            url: 'https://kupitak.ru/',
-            region: 'Ingushetia',
-            calculate: (price, downPayment, term) => {
-                const MAX_PRICE = 500000;
-                const MAX_TERM = 9;
-                const MIN_DOWN_PAYMENT_RATE = 0.25;
-                const MARKUP_RATE = 0.10;
-
-                if (price > MAX_PRICE || term > MAX_TERM || downPayment < (price * MIN_DOWN_PAYMENT_RATE)) {
-                    return null;
-                }
-
-                const financedAmount = price - downPayment;
-                const markupValue = financedAmount * MARKUP_RATE;
-                const totalPayout = financedAmount + markupValue;
-                const monthlyPayment = totalPayout / term;
-
-                return {
-                    markup: markupValue,
-                    totalCost: downPayment + totalPayout,
-                    monthlyPayment: monthlyPayment,
-                    note: 'Макс. сумма 500т, макс. срок 9 мес., мин. взнос 25%'
-                };
-            }
-        },
-        {
-            name: 'Al-Baraka',
-            url: 'https://www.al-baraka.ru/',
-            region: 'Ingushetia',
-            calculate: (price, downPayment, term) => {
-                const MAX_PRICE = 300000;
-                const MIN_DOWN_PAYMENT_RATE = 0.25;
-                const TERM_MARKUP_RATES = { 2: 0.04, 3: 0.06, 6: 0.12, 9: 0.181, 12: 0.242 };
-
-                if (price > MAX_PRICE || downPayment < (price * MIN_DOWN_PAYMENT_RATE) || !TERM_MARKUP_RATES[term]) {
-                    return null;
-                }
-
-                const financedAmount = price - downPayment;
-                const markupValue = financedAmount * TERM_MARKUP_RATES[term];
-                const totalPayout = financedAmount + markupValue;
-                const monthlyPayment = totalPayout / term;
-
-                return {
-                    markup: markupValue,
-                    totalCost: downPayment + totalPayout,
-                    monthlyPayment: monthlyPayment,
-                    note: 'Макс. сумма 300т, мин. взнос 25%'
-                };
-            }
-        },
-        {
-            name: 'LaRiba',
-            url: '#',  // TODO: Add URL when available
-            region: 'Dagestan',
-            calculate: (price, downPayment, term) => {
-                const MARKUP_RATE = 0.15;
-                const financedAmount = price - downPayment;
-                const markupValue = financedAmount * MARKUP_RATE;
-                const totalPayout = financedAmount + markupValue;
-                const monthlyPayment = totalPayout / term;
-
-                return {
-                    markup: markupValue,
-                    totalCost: downPayment + totalPayout,
-                    monthlyPayment: monthlyPayment
-                };
-            }
-        },
-        {
-            name: 'Vatan',
-            url: '#',  // TODO: Add URL when available
-            region: 'Dagestan',
-            calculate: (price, downPayment, term) => {
-                const TERM_MARKUP_RATES = { 3: 0.13, 6: 0.214, 9: 0.319444, 12: 0.4216 };
-                if (!TERM_MARKUP_RATES[term]) return null;
-
-                const financedAmount = price - downPayment;
-                const markupValue = financedAmount * TERM_MARKUP_RATES[term];
-                const totalPayout = financedAmount + markupValue;
-                const monthlyPayment = totalPayout / term;
-
-                return {
-                    markup: markupValue,
-                    totalCost: downPayment + totalPayout,
-                    monthlyPayment: monthlyPayment
-                };
-            }
-        }
-    ];
-
-    // --- Main Event Listeners ---
-    form.addEventListener('submit', (event) => {
+    // ============================================
+    // ОСНОВНАЯ ЛОГИКА
+    // ============================================
+    
+    // Обработчик отправки формы
+    form.addEventListener('submit', async (event) => {
         event.preventDefault();
+        
+        if (isLoading) return; // Предотвращаем множественные запросы
 
+        // Получение данных из формы
         const region = document.getElementById('region').value;
         const productPrice = parseFloat(document.getElementById('product-price').value);
         const downPayment = parseFloat(document.getElementById('down-payment').value);
         const term = parseInt(document.getElementById('term').value, 10);
 
+        // Валидация
         if (isNaN(productPrice) || productPrice <= 0) {
             alert('Пожалуйста, введите корректную стоимость товара.');
             return;
@@ -173,19 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        lastCalculationInputs = { productPrice, downPayment, term };
+        // Сохранение данных расчёта
+        lastCalculationInputs = { region, productPrice, downPayment, term };
 
-        const results = banks
-            .filter(bank => bank.region === region)
-            .map(bank => {
-                const calculatedData = bank.calculate(productPrice, downPayment, term);
-                return calculatedData ? { ...bank, ...calculatedData } : null;
-            })
-            .filter(Boolean); // Filter out null results
-
-        displayResults(results);
-
-        // Track calculation usage
+        // Отправка запроса к Cloudflare Worker
+        await fetchAndDisplayResults(region, productPrice, downPayment, term);
+        
+        // Аналитика: расчёт использован
         if (typeof ym === 'function') {
             ym(ymCounterId, 'reachGoal', 'calc_used', {
                 price: productPrice,
@@ -196,18 +70,122 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function displayResults(results) {
+    // ============================================
+    // API ЗАПРОСЫ
+    // ============================================
+    
+    /**
+     * Отправка запроса к Cloudflare Worker и отображение результатов
+     */
+    async function fetchAndDisplayResults(region, price, downPayment, term) {
+        try {
+            isLoading = true;
+            showLoadingState();
+
+            const response = await fetch(`${CLOUDFLARE_WORKER_URL}/api/calculate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    region: region,
+                    price: price,
+                    downPayment: downPayment,
+                    term: term
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            if (data.success === false && data.error === 'no_data') {
+                // Нет доступных данных
+                showNoDataState(data.message, data.failedBanks);
+            } else if (data.success && data.results) {
+                displayResults(data.results, data.warnings);
+            } else {
+                throw new Error(data.error || 'Неизвестная ошибка');
+            }
+
+        } catch (error) {
+            console.error('Ошибка при получении данных:', error);
+            showErrorState(error.message);
+        } finally {
+            isLoading = false;
+        }
+    }
+
+    // ============================================
+    // ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ
+    // ============================================
+    
+    /**
+     * Показать состояние "нет данных"
+     */
+    function showNoDataState(message, failedBanks) {
+        const failedList = failedBanks && failedBanks.length > 0 
+            ? `<ul class="failed-banks-list">${failedBanks.map(b => `<li>${b.name}</li>`).join('')}</ul>`
+            : '';
+
+        resultsContainer.innerHTML = `
+            <div class="placeholder error">
+                <p>⚠️ ${message}</p>
+                ${failedList}
+                <p class="info-text">Мы уже работаем над обновлением данных. Попробуйте обновить страницу через несколько минут.</p>
+                <button onclick="location.reload()" class="calculate-btn">Обновить страницу</button>
+            </div>`;
+    }
+
+    /**
+     * Показать состояние загрузки
+     */
+    function showLoadingState() {
+        resultsContainer.innerHTML = `
+            <div class="placeholder">
+                <div class="loading-spinner"></div>
+                <p>Загрузка предложений...</p>
+            </div>`;
+    }
+
+    /**
+     * Показать ошибку
+     */
+    function showErrorState(errorMessage) {
+        resultsContainer.innerHTML = `
+            <div class="placeholder error">
+                <p>⚠️ Произошла ошибка при загрузке данных.</p>
+                <p class="error-details">${errorMessage}</p>
+                <button onclick="location.reload()" class="calculate-btn">Обновить страницу</button>
+            </div>`;
+    }
+
+    /**
+     * Отобразить результаты расчётов
+     */
+    function displayResults(results, warnings) {
         const formatCurrency = (value) => Math.round(value).toLocaleString('ru-RU');
 
         if (results.length === 0) {
             resultsContainer.innerHTML = `
                 <div class="placeholder">
-                    <p>Нет доступных предложений для указанных параметров. Попробуйте изменить условия.</p>
+                    <p>❌ Нет доступных предложений для указанных параметров.</p>
+                    <p>Попробуйте изменить условия рассрочки.</p>
                 </div>`;
             return;
         }
 
+        // Предупреждения о недоступных банках
+        const warningsHtml = warnings && warnings.length > 0 
+            ? `<div class="warnings-banner">
+                <p>⚠️ ${warnings.join(' ')}</p>
+               </div>`
+            : '';
+
         const tableContent = `
+            ${warningsHtml}
             <div class="table-wrapper">
                 <table class="results-table" aria-live="polite">
                     <thead>
@@ -220,11 +198,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         </tr>
                     </thead>
                     <tbody>
-                        ${results.map(result => {
+                        ${results.map((result, index) => {
                             const noteHtml = result.note ? `<span class="bank-note">${result.note}</span>` : '';
+                            const bestDeal = index === 0 ? '<span class="best-deal-badge">🏆 Лучшее</span>' : '';
+                            
                             return `
                             <tr>
-                                <td data-label="Компания" class="bank-name-cell">${result.name}${noteHtml}</td>
+                                <td data-label="Компания" class="bank-name-cell">
+                                    ${result.name}
+                                    ${bestDeal}
+                                    ${noteHtml}
+                                </td>
                                 <td data-label="Наценка (₽)">${formatCurrency(result.markup)}</td>
                                 <td data-label="Итого (₽)">${formatCurrency(result.totalCost)}</td>
                                 <td data-label="В месяц (₽)">${formatCurrency(result.monthlyPayment)}</td>
@@ -243,18 +227,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     </tbody>
                 </table>
             </div>
-            <p class="disclaimer">💡 Расчёты носят справочный характер. Финальные условия уточняйте у компании-продавца.</p>
+            <p class="disclaimer">
+                💡 Расчёты носят справочный характер. Финальные условия уточняйте у компании-продавца.
+            </p>
         `;
+        
         resultsContainer.innerHTML = tableContent;
     }
 
-    // --- Bank Link Click Tracking ---
+    // ============================================
+    // ОТСЛЕЖИВАНИЕ КЛИКОВ ПО ССЫЛКАМ
+    // ============================================
+    
     resultsContainer.addEventListener('click', (event) => {
         if (event.target.classList.contains('bank-link')) {
             const link = event.target;
             const bankName = link.getAttribute('data-bank-name');
 
-            // Track bank link click with Yandex Metrika
+            // Аналитика: клик по ссылке банка
             if (typeof ym === 'function') {
                 ym(ymCounterId, 'reachGoal', 'bank_link_click', {
                     bank: bankName,
