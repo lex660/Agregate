@@ -568,4 +568,128 @@ footer {
     .form-group input, .form-group select { 
         font-size: 16px; /* Prevent zoom on iOS */ 
     }
+
+}
+/* ============================================
+   ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ CLOUDFLARE ВЕРСИИ
+   ============================================ */
+
+/* Баннер с предупреждениями */
+.warnings-banner {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    border-left: 4px solid #F59E0B;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+}
+
+.warnings-banner p {
+    color: #92400E;
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Список неудачных банков */
+.failed-banks-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.failed-banks-list li {
+    background: rgba(239, 68, 68, 0.1);
+    color: #991B1B;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.info-text {
+    font-size: 0.875rem;
+    color: #6B7280;
+    margin: 1rem 0;
+}
+
+/* Индикатор загрузки */
+.loading-spinner {
+    border: 4px solid rgba(16, 185, 129, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Стили для ошибок */
+.placeholder.error {
+    border-color: #EF4444;
+    background-color: #FEE2E2;
+}
+
+.placeholder.error p {
+    color: #DC2626;
+}
+
+.error-details {
+    font-size: 0.875rem;
+    color: #991B1B;
+    margin-top: 0.5rem;
+    font-family: monospace;
+}
+
+/* Бейдж "Лучшее предложение" */
+.best-deal-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    margin-left: 0.5rem;
+    font-weight: 700;
+    vertical-align: middle;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+}
+
+/* Анимация появления результатов */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.results-table tbody tr {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.results-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+.results-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+.results-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+.results-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+
+/* Мобильные стили для бейджа */
+@media (max-width: 768px) {
+    .best-deal-badge {
+        display: block;
+        margin: 0.5rem 0 0 0;
+        text-align: center;
+    }
 }
