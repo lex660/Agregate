@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================
     
     // ВАЖНО: Замените этот URL на URL вашего Cloudflare Worker
-    const CLOUDFLARE_WORKER_URL = 'https://islamic-installment-api.sasun-smbatyan.workers.dev';
+    const CLOUDFLARE_WORKER_URL = 'https://islamic-installment-api.ghalghaiv.workers.dev';
     
     // DOM элементы
     const form = document.getElementById('calculator-form');
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const productPrice = parseFloat(document.getElementById('product-price').value);
         const downPayment = parseFloat(document.getElementById('down-payment').value);
         const term = parseInt(document.getElementById('term').value, 10);
-
+        
         // Валидация
         if (isNaN(productPrice) || productPrice <= 0) {
             alert('Пожалуйста, введите корректную стоимость товара.');
