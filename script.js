@@ -32,6 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         
         if (isLoading) return; // Предотвращаем множественные запросы
+          if (isLoading) return; // Предотвращаем множественные запросы
+    if (typeof ym === 'function') {
+        ym(104202450, 'reachGoal', 'calc_click');
+        console.log('Yandex.Metrica: calc_click sent');
+    }
 
         // Получение данных из формы
         const region = document.getElementById('region').value;
