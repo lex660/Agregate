@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
         
-        if (isLoading) return; // Предотвращаем множественные запросы
-          if (isLoading) return; // Предотвращаем множественные запросы
-    if (typeof ym === 'function') {
-        ym(104202450, 'reachGoal', 'calc_click');
-        console.log('Yandex.Metrica: calc_click sent');
-    }
-
+  if (isLoading) return; // Предотвращаем множественные запросы
+    // REMOVED: if (isLoading) return; // (The duplicate line)
+   console.log(ym);
+    if (typeof ym === 'function') {
+        ym(104202450, 'reachGoal', 'calc_click'); // This specific ID is okay, but using ymCounterId is cleaner
+        console.log('Yandex.Metrica: calc_click sent');
+    }
         // Получение данных из формы
         const region = document.getElementById('region').value;
         const productPrice = parseFloat(document.getElementById('product-price').value);
