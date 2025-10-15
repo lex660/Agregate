@@ -2,42 +2,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================
     // КОНФИГУРАЦИЯ
     // ============================================
-    
-    // ВАЖНО: Замените этот URL на URL вашего Cloudflare Worker
     const CLOUDFLARE_WORKER_URL = 'https://islamic-installment-api.ghalghaiv.workers.dev';
     const ymCounterId = 104202450;
-    // DOM элементы
+
     const form = document.getElementById('calculator-form');
     const resultsContainer = document.getElementById('results-container');
-    
-    // Переменные состояния
+
     let lastCalculationInputs = {};
     let isLoading = false;
 
     // ============================================
-    // АНАЛИТИКА
+    // АНАЛИТИКА: посещение страницы
     // ============================================
-    
-    // Отслеживание посещения страницы
     if (typeof ym === 'function') {
-        ym(ymCounterId, 'reachGoal', 'visit');
+        try { ym(ymCounterId, 'reachGoal', 'visit'); } catch (e) { console.warn('ym error', e); }
     }
 
     // ============================================
-    // ОСНОВНАЯ ЛОГИКА
+    // ОБРАБОТЧИК ОТПРАВКИ ФОРМЫ
     // ============================================
-    
-    // Обработчик отправки формы
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        
-  if (isLoading) return; // Предотвращаем множественные запросы
+        if (isLoading) return;
+
+        // Отправляем событие клика здесь (сразу при нажатии)
+        if (typeof ym === 'function') {
+            try {
+                ym(ymCounterId, 'reachGoal', 'calc_click');
+                console.log('ym: calc_click sent');
+            } catch (e) {
+                console.warn('ym(calc_click) error', e);
+            }
+        } else {
+            console.log('ym is not defined yet');
+        }
+
         // Получение данных из формы
         const region = document.getElementById('region').value;
         const productPrice = parseFloat(document.getElementById('product-price').value);
         const downPayment = parseFloat(document.getElementById('down-payment').value);
         const term = parseInt(document.getElementById('term').value, 10);
-        
+
         // Валидация
         if (isNaN(productPrice) || productPrice <= 0) {
             alert('Пожалуйста, введите корректную стоимость товара.');
@@ -52,30 +57,30 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Сохранение данных расчёта
         lastCalculationInputs = { region, productPrice, downPayment, term };
 
         // Отправка запроса к Cloudflare Worker
         await fetchAndDisplayResults(region, productPrice, downPayment, term);
-        
-        // Аналитика: расчёт использован
+
+        // Событие "расчёт использован" (доп. данные)
         if (typeof ym === 'function') {
-            ym(ymCounterId, 'reachGoal', 'calc_click', {
-                price: productPrice,
-                down_payment: downPayment,
-                term: term,
-                region: region
-            });
+            try {
+                ym(ymCounterId, 'reachGoal', 'calc_used', {
+                    price: productPrice,
+                    down_payment: downPayment,
+                    term: term,
+                    region: region
+                });
+                console.log('ym: calc_used sent');
+            } catch (e) {
+                console.warn('ym(calc_used) error', e);
+            }
         }
     });
 
     // ============================================
     // API ЗАПРОСЫ
     // ============================================
-    
-    /**
-     * Отправка запроса к Cloudflare Worker и отображение результатов
-     */
     async function fetchAndDisplayResults(region, price, downPayment, term) {
         try {
             isLoading = true;
@@ -83,52 +88,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const response = await fetch(`${CLOUDFLARE_WORKER_URL}/api/calculate`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    region: region,
-                    price: price,
-                    downPayment: downPayment,
-                    term: term
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ region, price, downPayment, term })
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
-            
+
             if (data.success === false && data.error === 'no_data') {
-                // Нет доступных данных
                 showNoDataState(data.message, data.failedBanks);
             } else if (data.success && data.results) {
                 displayResults(data.results, data.warnings);
             } else {
                 throw new Error(data.error || 'Неизвестная ошибка');
             }
-
         } catch (error) {
             console.error('Ошибка при получении данных:', error);
-            showErrorState(error.message);
+            showErrorState(error.message || error.toString());
         } finally {
             isLoading = false;
         }
     }
 
     // ============================================
-    // ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ
+    // ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ (как у тебя)
     // ============================================
-    
-    /**
-     * Показать состояние "нет данных"
-     */
     function showNoDataState(message, failedBanks) {
-        const failedList = failedBanks && failedBanks.length > 0 
+        const failedList = failedBanks && failedBanks.length > 0
             ? `<ul class="failed-banks-list">${failedBanks.map(b => `<li>${b.name}</li>`).join('')}</ul>`
             : '';
-
         resultsContainer.innerHTML = `
             <div class="placeholder error">
                 <p>⚠️ ${message}</p>
@@ -138,9 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
     }
 
-    /**
-     * Показать состояние загрузки
-     */
     function showLoadingState() {
         resultsContainer.innerHTML = `
             <div class="placeholder">
@@ -149,9 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
     }
 
-    /**
-     * Показать ошибку
-     */
     function showErrorState(errorMessage) {
         resultsContainer.innerHTML = `
             <div class="placeholder error">
@@ -161,13 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
     }
 
-    /**
-     * Отобразить результаты расчётов
-     */
     function displayResults(results, warnings) {
         const formatCurrency = (value) => Math.round(value).toLocaleString('ru-RU');
-
-        if (results.length === 0) {
+        if (!results || results.length === 0) {
             resultsContainer.innerHTML = `
                 <div class="placeholder">
                     <p>❌ Нет доступных предложений для указанных параметров.</p>
@@ -176,12 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Предупреждения о недоступных банках
-        const warningsHtml = warnings && warnings.length > 0 
-            ? `<div class="warnings-banner">
-                <p>⚠️ ${warnings.join(' ')}</p>
-               </div>`
-            : '';
+        const warningsHtml = warnings && warnings.length ? `<div class="warnings-banner"><p>⚠️ ${warnings.join(' ')}</p></div>` : '';
 
         const tableContent = `
             ${warningsHtml}
@@ -200,13 +173,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${results.map((result, index) => {
                             const noteHtml = result.note ? `<span class="bank-note">${result.note}</span>` : '';
                             const bestDeal = index === 0 ? '<span class="best-deal-badge">🏆 Лучшее</span>' : '';
-                            
                             return `
                             <tr>
                                 <td data-label="Компания" class="bank-name-cell">
-                                    ${result.name}
-                                    ${bestDeal}
-                                    ${noteHtml}
+                                    ${result.name} ${bestDeal} ${noteHtml}
                                 </td>
                                 <td data-label="Наценка (₽)">${formatCurrency(result.markup)}</td>
                                 <td data-label="Итого (₽)">${formatCurrency(result.totalCost)}</td>
@@ -220,38 +190,43 @@ document.addEventListener('DOMContentLoaded', () => {
                                         Перейти на сайт
                                     </a>
                                 </td>
-                            </tr>
-                            `;
+                            </tr>`;
                         }).join('')}
                     </tbody>
                 </table>
             </div>
-            <p class="disclaimer">
-                💡 Расчёты носят справочный характер. Финальные условия уточняйте у компании-продавца.
-            </p>
+            <p class="disclaimer">💡 Расчёты носят справочный характер. Финальные условия уточняйте у компании-продавца.</p>
         `;
-        
         resultsContainer.innerHTML = tableContent;
+        console.log('Results rendered, bank links ready');
     }
 
     // ============================================
-    // ОТСЛЕЖИВАНИЕ КЛИКОВ ПО ССЫЛКАМ
+    // ОТСЛЕЖИВАНИЕ КЛИКОВ ПО ССЫЛКАМ (делегирование)
     // ============================================
-    
     resultsContainer.addEventListener('click', (event) => {
-        if (event.target.classList.contains('bank-link')) {
-            const link = event.target;
-            const bankName = link.getAttribute('data-bank-name');
+        const link = event.target.closest && event.target.closest('a.bank-link');
+        if (!link) return;
 
-            // Аналитика: клик по ссылке банка
-            if (typeof ym === 'function') {
-                ym(ymCounterId, 'reachGoal', 'bank_click', {
-                    bank: bankName,
-                    price: lastCalculationInputs.productPrice,
-                    down_payment: lastCalculationInputs.downPayment,
-                    term: lastCalculationInputs.term
-                });
+        const bankName = link.getAttribute('data-bank-name') || 'unknown';
+        const sentData = {
+            bank: bankName,
+            price: lastCalculationInputs.productPrice || lastCalculationInputs.price || null,
+            down_payment: lastCalculationInputs.downPayment || lastCalculationInputs.down_payment || null,
+            term: lastCalculationInputs.term || null
+        };
+
+        if (typeof ym === 'function') {
+            try {
+                ym(ymCounterId, 'reachGoal', 'bank_click', sentData);
+                console.log('ym: bank_click sent', sentData);
+            } catch (e) {
+                console.warn('ym(bank_click) error', e);
             }
+        } else {
+            console.log('ym is not defined, bank_click not sent', sentData);
         }
+
+        // Для безопасности — не блокируем переход (ссылки открываются в _blank)
     });
 });
