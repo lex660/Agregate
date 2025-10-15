@@ -101,14 +101,20 @@ body::after {
 }
 
 .container { 
-    width: 100%; 
-    max-width: 1400px; 
+    width: 65%;  
     margin: 0 auto; 
     padding: 2rem 3rem; 
     box-sizing: border-box; 
     position: relative; 
     z-index: 1; 
+
+    /* Center content */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* horizontal center */
+    justify-content: center; /* vertical center (optional, if you want it in the middle of the page) */
 }
+
 
 .header-section {
     text-align: center;
