@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // ВАЖНО: Замените этот URL на URL вашего Cloudflare Worker
     const CLOUDFLARE_WORKER_URL = 'https://islamic-installment-api.ghalghaiv.workers.dev';
-    
+    const ymCounterId = 104202450;
     // DOM элементы
     const form = document.getElementById('calculator-form');
     const resultsContainer = document.getElementById('results-container');
@@ -32,12 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         
   if (isLoading) return; // Предотвращаем множественные запросы
-    // REMOVED: if (isLoading) return; // (The duplicate line)
-   console.log(ym);
-    if (typeof ym === 'function') {
-        ym(104202450, 'reachGoal', 'calc_click'); // This specific ID is okay, but using ymCounterId is cleaner
-        console.log('Yandex.Metrica: calc_click sent');
-    }
         // Получение данных из формы
         const region = document.getElementById('region').value;
         const productPrice = parseFloat(document.getElementById('product-price').value);
@@ -66,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Аналитика: расчёт использован
         if (typeof ym === 'function') {
-            ym(ymCounterId, 'reachGoal', 'calc_used', {
+            ym(ymCounterId, 'reachGoal', 'calc_click', {
                 price: productPrice,
                 down_payment: downPayment,
                 term: term,
@@ -251,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Аналитика: клик по ссылке банка
             if (typeof ym === 'function') {
-                ym(ymCounterId, 'reachGoal', 'bank_link_click', {
+                ym(ymCounterId, 'reachGoal', 'bank_click', {
                     bank: bankName,
                     price: lastCalculationInputs.productPrice,
                     down_payment: lastCalculationInputs.downPayment,
