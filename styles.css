@@ -269,15 +269,22 @@ body::after {
     height: 38px; 
 }
 
-.calculate-btn { 
-    grid-column: span 1; 
-    margin-top: 0; 
-    height: 38px; 
-    padding: 0; 
-    white-space: nowrap; 
-    margin-bottom:17px;
+.calculate-btn {
+  width: 100%;
+  background: #0b3d2e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ✅ centers text horizontally */
+  line-height: 1;          /* ✅ keeps vertical alignment tight */
+  margin-bottom: 17px;
 }
-
 .form-group input:focus, .form-group select:focus { 
     outline: none; 
     border-color: var(--primary-color); 
