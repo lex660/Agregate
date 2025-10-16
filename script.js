@@ -29,13 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof ym === 'function') {
             try {
                 ym(ymCounterId, 'reachGoal', 'calc_click');
-                console.log('ym: calc_click sent');
             } catch (e) {
-                console.warn('ym(calc_click) error', e);
             }
-        } else {
-            console.log('ym is not defined yet');
-        }
+        } 
 
         // Получение данных из формы
         const region = document.getElementById('region').value;
@@ -71,9 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     term: term,
                     region: region
                 });
-                console.log('ym: calc_used sent');
             } catch (e) {
-                console.warn('ym(calc_used) error', e);
             }
         }
     });
@@ -103,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.error || 'Неизвестная ошибка');
             }
         } catch (error) {
-            console.error('Ошибка при получении данных:', error);
             showErrorState(error.message || error.toString());
         } finally {
             isLoading = false;
@@ -171,7 +164,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </thead>
                     <tbody>
                         ${results.map((result, index) => {
-                            const noteHtml = result.note ? `<span class="bank-note">${result.note}</span>` : '';
+                        const noteHtml = result.note
+  ? `<span class="bank-note">${result.note}</span>`
+  : `<span class="bank-note">Общая стоимость: ${result.totalCost.toLocaleString()}₽, платеж ${result.monthlyPayment.toLocaleString()}₽/мес., мин. взнос 25%</span>`;
                             const bestDeal = index === 0 ? '<span class="best-deal-badge">🏆 Лучшее</span>' : '';
                             return `
                             <tr>
@@ -198,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="disclaimer">💡 Расчёты носят справочный характер. Финальные условия уточняйте у компании-продавца.</p>
         `;
         resultsContainer.innerHTML = tableContent;
-        console.log('Results rendered, bank links ready');
     }
 
     // ============================================
@@ -219,14 +213,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof ym === 'function') {
             try {
                 ym(ymCounterId, 'reachGoal', 'bank_click', sentData);
-                console.log('ym: bank_click sent', sentData);
             } catch (e) {
-                console.warn('ym(bank_click) error', e);
             }
-        } else {
-            console.log('ym is not defined, bank_click not sent', sentData);
         }
-
         // Для безопасности — не блокируем переход (ссылки открываются в _blank)
     });
 });
