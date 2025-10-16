@@ -275,6 +275,7 @@ body::after {
     height: 38px; 
     padding: 0; 
     white-space: nowrap; 
+    margin-bottom:17px;
 }
 
 .form-group input:focus, .form-group select:focus { 
