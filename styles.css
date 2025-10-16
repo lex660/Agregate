@@ -100,13 +100,14 @@ body::after {
     animation: float 8s ease-in-out infinite;
 }
 
-.container { 
-    width: 65%;  
-    margin: 0 auto; 
-    padding: 2rem 3rem; 
-    box-sizing: border-box; 
-    position: relative; 
-    z-index: 1; 
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 3rem;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
 
     /* Center content */
     display: flex;
@@ -182,6 +183,8 @@ body::after {
     transition: box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
+    width: 100%;
+    max-width: 100%;
 }
 
 .card::before {
@@ -458,123 +461,371 @@ footer {
     display: none; 
 }
 
+/* Large Tablet Styles */
+@media (max-width: 1200px) {
+    .container {
+        width: 92%;
+        padding: 2rem;
+    }
+}
+
 /* Tablet Styles */
 @media (max-width: 1024px) {
-    #calculator-form { 
-        grid-template-columns: 1fr 1fr 1fr; 
+    .container {
+        width: 95%;
+        padding: 1.5rem;
     }
-    .form-group:nth-child(4) { 
-        grid-column: span 1; 
+
+    body::after {
+        font-size: 150px;
+        right: 5%;
     }
-    .calculate-btn { 
-        grid-column: span 3; 
-        margin-top: 0.5rem; 
-        height: 42px; 
+
+    #calculator-form {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .form-group:nth-child(1),
+    .form-group:nth-child(2),
+    .form-group:nth-child(3) {
+        grid-column: span 2;
+    }
+
+    .form-group:nth-child(4),
+    .form-group:nth-child(5) {
+        grid-column: span 1;
+    }
+
+    .calculate-btn {
+        grid-column: span 2;
+        margin-top: 0.5rem;
+        height: 42px;
+    }
+
+    .header-section h1 {
+        font-size: 2rem;
+    }
+
+    .card {
+        padding: 1.75rem;
     }
 }
 
 /* Mobile Styles */
 @media (max-width: 768px) {
-    .container { 
-        padding: 1rem; 
-    }
-    .header-section h1 { 
-        font-size: 1.8rem; 
-    }
-    .header-section p { 
-        font-size: 1rem; 
-    }
-    .card { 
-        padding: 1.5rem; 
-    }
-    #calculator-form { 
-        grid-template-columns: 1fr; 
-        gap: 1rem; 
-    }
-    .form-group label { 
-        white-space: normal; 
-    }
-    .calculate-btn { 
-        grid-column: span 1; 
-        height: 44px; 
-        margin-top: 0.5rem; 
-    }
-    .table-wrapper { 
-        overflow-x: hidden; 
-    }
-    .results-table { 
-        min-width: unset; 
-        border: 0; 
-    }
-    .results-table thead { 
-        border: none; 
-        clip: rect(0 0 0 0); 
-        height: 1px; 
-        margin: -1px; 
-        overflow: hidden; 
-        padding: 0; 
-        position: absolute; 
-        width: 1px; 
-    }
-    .results-table tbody { 
-        display: flex; 
-        flex-direction: column; 
-        gap: 1rem; 
-    }
-    .results-table tr { 
-        display: block; 
-        border: 1px solid var(--border-color); 
-        border-radius: var(--border-radius); 
-        padding: 1rem; 
-        background-color: var(--card-background-color); 
-        box-shadow: 0 2px 4px rgb(0 0 0 / 0.05); 
-    }
-    .results-table td { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: flex-start; 
-        text-align: right; 
-        font-size: 0.9rem; 
-        border-bottom: 1px solid var(--border-color); 
-        padding: 0.75rem 0; 
-    }
-    .results-table td:last-child { 
-        border-bottom: 0; 
-        padding-top: 1rem; 
-    }
-    .results-table td::before { 
-        content: attr(data-label); 
-        font-weight: 700; 
-        text-align: left; 
-        padding-right: 1rem; 
-        color: var(--text-light-color); 
-        flex-shrink: 0; 
-    }
-    .results-table td.bank-name-cell { 
-        display: block; 
-        font-size: 1.25rem; 
-        font-weight: 700; 
-        text-align: center; 
-        padding-bottom: 1rem; 
-        border-bottom: 2px solid var(--border-color); 
-        margin-bottom: 0.75rem; 
-    }
-    .results-table td.bank-name-cell::before { 
-        display: none; 
-    }
-    .results-table .bank-note { 
-        font-size: 0.75rem; 
-        margin-top: 0.25rem; 
-        text-align: center; 
-    }
-    .results-table .apply-btn { 
-        width: 100%; 
-        text-align: center; 
-    }
-    .form-group input, .form-group select { 
-        font-size: 16px; /* Prevent zoom on iOS */ 
+    .container {
+        width: 100%;
+        padding: 1rem;
     }
 
+    /* Hide or reduce decorative elements on mobile */
+    body::after {
+        font-size: 120px;
+        opacity: 0.04;
+        top: 10%;
+        right: -5%;
+    }
+
+    .container::before,
+    .container::after {
+        display: none;
+    }
+
+    #calculator-section::after,
+    #results-section::after {
+        display: none;
+    }
+
+    .header-section {
+        margin-bottom: 2rem;
+        padding: 1.5rem 0;
+    }
+
+    .header-section::before {
+        width: 80px;
+        height: 4px;
+    }
+
+    .header-section::after {
+        font-size: 12px;
+        letter-spacing: 10px;
+    }
+
+    .header-section h1 {
+        font-size: 1.75rem;
+        line-height: 1.2;
+        margin-bottom: 0.75rem;
+    }
+
+    .header-section p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .card {
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .card h2 {
+        font-size: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    #calculator-form {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .form-group label {
+        white-space: normal;
+        font-size: 0.85rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        font-size: 16px; /* Prevent zoom on iOS */
+        padding: 0.65rem;
+        height: 44px;
+    }
+
+    .calculate-btn {
+        grid-column: span 1;
+        height: 48px;
+        margin-top: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .table-wrapper {
+        overflow-x: hidden;
+    }
+
+    .results-table {
+        min-width: unset;
+        border: 0;
+    }
+
+    .results-table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .results-table tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .results-table tr {
+        display: block;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: 1.25rem;
+        background-color: var(--card-background-color);
+        box-shadow: 0 2px 8px rgb(0 0 0 / 0.06);
+    }
+
+    .results-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        text-align: right;
+        font-size: 0.9rem;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.75rem 0;
+    }
+
+    .results-table td:last-child {
+        border-bottom: 0;
+        padding-top: 1rem;
+    }
+
+    .results-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        text-align: left;
+        padding-right: 1rem;
+        color: var(--text-light-color);
+        flex-shrink: 0;
+        font-size: 0.85rem;
+    }
+
+    .results-table td.bank-name-cell {
+        display: block;
+        font-size: 1.15rem;
+        font-weight: 700;
+        text-align: center;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--primary-color);
+        margin-bottom: 0.75rem;
+    }
+
+    .results-table td.bank-name-cell::before {
+        display: none;
+    }
+
+    .results-table .bank-note {
+        font-size: 0.7rem;
+        margin-top: 0.35rem;
+        text-align: center;
+        line-height: 1.4;
+    }
+
+    .results-table .apply-btn {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    .main-layout {
+        gap: 1.5rem;
+    }
+
+    footer {
+        margin-top: 2rem;
+        padding: 1.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .warnings-banner {
+        padding: 0.875rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .placeholder {
+        padding: 2rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Medium Mobile - Landscape phones */
+@media (max-width: 640px) {
+    .header-section h1 {
+        font-size: 1.6rem;
+    }
+
+    .card {
+        padding: 1.15rem;
+    }
+
+    body::after {
+        display: none;
+    }
+}
+
+/* Small Mobile Styles */
+@media (max-width: 480px) {
+    .container {
+        padding: 0.75rem;
+    }
+
+    .header-section {
+        padding: 1rem 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .header-section h1 {
+        font-size: 1.5rem;
+    }
+
+    .header-section p {
+        font-size: 0.9rem;
+    }
+
+    .card {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .card h2 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        font-size: 0.8rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0.6rem;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+
+    .calculate-btn {
+        height: 46px;
+        font-size: 0.95rem;
+    }
+
+    .results-table tr {
+        padding: 1rem;
+    }
+
+    .results-table td {
+        font-size: 0.85rem;
+        padding: 0.6rem 0;
+    }
+
+    .results-table td::before {
+        font-size: 0.8rem;
+    }
+
+    .results-table td.bank-name-cell {
+        font-size: 1.05rem;
+        padding-bottom: 0.875rem;
+    }
+
+    .results-table .bank-note {
+        font-size: 0.65rem;
+    }
+
+    .apply-btn {
+        padding: 0.7rem 0.875rem;
+        font-size: 0.9rem;
+    }
+
+    .main-layout {
+        gap: 1.25rem;
+    }
+
+    footer {
+        padding: 1.25rem 0.75rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+    .container {
+        padding: 0.5rem;
+    }
+
+    .header-section h1 {
+        font-size: 1.35rem;
+    }
+
+    .card {
+        padding: 0.875rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0.55rem;
+    }
+
+    .results-table td {
+        font-size: 0.8rem;
+    }
 }
 /* ============================================
    ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ CLOUDFLARE ВЕРСИИ
