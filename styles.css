@@ -950,3 +950,164 @@ footer {
         text-align: center;
     }
 }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Manrope", sans-serif;
+  background-color: #f5f6f8;
+  color: #222;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ==== Page Grid Layout ==== */
+:root {
+  --ad-left: 200px;
+  --ad-right: 200px;
+  --ad-min: 120px;
+  --page-max: 1100px;
+  --gutter: 1.5rem;
+}
+
+.page-grid {
+  display: grid;
+  grid-template-columns: minmax(0, var(--ad-left)) 1fr minmax(0, var(--ad-right));
+  gap: var(--gutter);
+  align-items: start;
+  justify-items: center;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+/* Ad slots */
+.ad-slot {
+  background-color: #f0f0f0;
+  min-height: 100vh;
+  border-radius: 8px;
+  opacity: 0.5;
+}
+
+.page-main {
+  width: 100%;
+  max-width: var(--page-max);
+}
+
+/* Responsive behavior */
+@media (max-width: 1200px) {
+  :root {
+    --ad-left: var(--ad-min);
+    --ad-right: var(--ad-min);
+  }
+}
+
+@media (max-width: 900px) {
+  .ad-slot {
+    display: none;
+  }
+
+  .page-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==== Page Content Styling ==== */
+.container {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 2rem auto;
+  padding: 1.5rem;
+}
+
+/* Header */
+.header-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header-section h1 {
+  font-size: 2rem;
+  color: #0b3d2e;
+  margin-bottom: 1rem;
+}
+
+.header-section p {
+  color: #555;
+}
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Form */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+input, select {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+input:focus, select:focus {
+  border-color: #0b3d2e;
+  outline: none;
+}
+
+.calculate-btn {
+  width: 100%;
+  background: #0b3d2e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.calculate-btn:hover {
+  background: #116b4e;
+}
+
+/* Results section */
+.placeholder {
+  text-align: center;
+  color: #777;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Small screens */
+@media (max-width: 600px) {
+  .header-section h1 {
+    font-size: 1.5rem;
+  }
+
+  input, select {
+    font-size: 0.95rem;
+  }
+}
