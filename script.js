@@ -11,11 +11,52 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastCalculationInputs = {};
     let isLoading = false;
 
-    // ============================================
-    // АНАЛИТИКА: посещение страницы
-    // ============================================
-    if (typeof ym === 'function') {
-        try { ym(ymCounterId, 'reachGoal', 'visit'); } catch (e) { console.warn('ym error', e); }
+  // =========================
+  // ЕДИНЫЙ МАССИВ МЕДИА (РОВНО 4 ЭЛЕМЕНТА)
+  // Порядок важен: [0,1] — слева; [2,3] — справа; на мобиле все 4 идут между тарифами
+  // =========================
+  const MEDIA_ITEMS = [
+    {
+      href: "https://www.google.com/",
+      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
+      alt: "Медиа 1",
+    },
+    {
+      href: "#",
+      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
+      alt: "Медиа 2",
+    },
+    {
+      href: "#",
+      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
+      alt: "Медиа 3",
+    },
+    {
+      href: "#",
+      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
+      alt: "Медиа 4",
+    },
+  ];
+
+  // после каких по счёту строк вставлять inline (1-based)
+  const INLINE_INSERT_POSITIONS = [1, 2, 3, 4];
+
+  // медиазапрос для переключения режимов
+  const mq = window.matchMedia("(max-width: 1024px)");
+  let lastInlineMode = mq.matches;
+
+  function isInlineMode() {
+    return mq.matches;
+  }
+
+  // =========================
+  // АНАЛИТИКА: посещение
+  // =========================
+  if (typeof ym === "function") {
+    try {
+      ym(ymCounterId, "reachGoal", "visit");
+    } catch (e) {
+      console.warn("ym error", e);
     }
 
     // ============================================
