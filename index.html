@@ -1,136 +1,111 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Исламская Рассрочка - Калькулятор</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet" />
-
-    <!-- твои стили (как у тебя в последней версии) -->
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 
     <!-- Yandex.Metrika counter -->
-    <script>
-        (function (m, e, t, r, i, k, a) {
-            m[i] =
-                m[i] ||
-                function () {
-                    (m[i].a = m[i].a || []).push(arguments);
-                };
-            m[i].l = 1 * new Date();
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
             for (var j = 0; j < document.scripts.length; j++) {
-                if (document.scripts[j].src === r) {
-                    return;
-                }
+                if (document.scripts[j].src === r) { return; }
             }
-            k = e.createElement(t), (a = e.getElementsByTagName(t)[0]), (k.async = 1), (k.src = r), a.parentNode.insertBefore(k, a);
-        })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=104202450", "ym");
-
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],
+            k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104202450', 'ym');
         const ymCounterId = 104202450;
-        ym(ymCounterId, "init", {
-            webvisor: true,
-            clickmap: true,
-            trackLinks: true,
-            accurateTrackBounce: true,
+        ym(104202450, 'init', {
+            webvisor:true,
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true
         });
     </script>
-    <noscript>
-        <div>
-            <img src="https://mc.yandex.ru/watch/104202450" style="position: absolute; left: -9999px" alt="" />
-        </div>
-    </noscript>
+    <noscript><div><img src="https://mc.yandex.ru/watch/104202450" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
 </head>
-
 <body>
-    <div class="page-grid">
-        <!-- Левая колонка: пустая, JS сам заполнит -->
-        <aside class="side-media" data-slot="left" aria-label="Боковая колонка слева"></aside>
 
-        <!-- Центральный контент -->
-        <main class="page-main">
-            <div class="container">
-                <header class="header-section">
-                    <h1>Калькулятор исламской рассрочки</h1>
-                    <p>
-                        Сравните условия от разных компаний, предоставляющих исламские рассрочки, и выберите лучшее
-                        предложение. Сервис работает в
-                        тестовом режиме.
-                    </p>
-                </header>
+<div class="page-grid">
+    <aside class="ad-slot ad-left" aria-hidden="true">
+        <!-- Место для рекламы или пустое пространство -->
+    </aside>
 
-                <main class="main-layout">
-                    <section id="calculator-section" class="card">
-                        <h2>Параметры расчета</h2>
-                        <p class="min-fee-note">мин. взнос 25%</p>
+    <main class="page-main">
+        <div class="container">
+            <header class="header-section">
+                <h1>Калькулятор исламской рассрочки</h1>
+                <p>Сравните условия от разных компаний, предоставляющих исламские рассрочки, и выберите лучшее предложение.</p>
+            </header>
 
-                        <form id="calculator-form" aria-label="Форма калькулятора рассрочки">
-                            <div class="form-group">
-                                <label for="region">Регион</label>
-                                <select id="region" name="region" required>
-                                    <option value="Ingushetia">Ингушетия</option>
-                                    <option value="Dagestan">Дагестан</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="product-price">Стоимость товара (₽)</label>
-                                <input type="number" id="product-price" name="product-price"
-                                    placeholder="Например, 200000" required />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="down-payment">Первоначальный взнос (₽)</label>
-                                <input type="number" id="down-payment" name="down-payment" placeholder="Например, 70000"
-                                    required />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="term">Срок (месяцев)</label>
-                                <select id="term" name="term" required>
-                                    <option value="2">2 месяца</option>
-                                    <option value="3">3 месяца</option>
-                                    <option value="4">4 месяца</option>
-                                    <option value="5">5 месяцев</option>
-                                    <option value="6" selected>6 месяцев</option>
-                                    <option value="7">7 месяцев</option>
-                                    <option value="8">8 месяцев</option>
-                                    <option value="9">9 месяцев</option>
-                                    <option value="10">10 месяцев</option>
-                                    <option value="11">11 месяцев</option>
-                                    <option value="12">12 месяцев</option>
-                                </select>
-                            </div>
-
-                            <button type="submit" class="calculate-btn">Рассчитать</button>
-                        </form>
-                    </section>
-
-                    <section id="results-section" class="card">
-                        <h2>Сравнение предложений</h2>
-                        <div id="results-container">
-                            <div class="placeholder">
-                                <p>Введите данные в калькулятор, чтобы увидеть здесь сравнение предложений.</p>
-                            </div>
+            <main class="main-layout">
+                <section id="calculator-section" class="card">
+                    <h2>Параметры расчета</h2>
+                    <p style="text-align: center; font-size: 0.9em; margin-top: -2em; margin-bottom: 5px; font-weight: bold;">минимальный первоначальный взнос 25%</p>
+                    <form id="calculator-form" aria-label="Форма калькулятора рассрочки">
+                        <div class="form-group">
+                            <label for="region">Регион</label>
+                            <select id="region" name="region" required>
+                                <option value="Ingushetia">Ингушетия</option>
+                                <option value="Dagestan">Дагестан</option>
+                            </select>
                         </div>
-                    </section>
-                </main>
+                        <div class="form-group">
+                            <label for="product-price">Стоимость товара (₽)</label>
+                            <input type="number" id="product-price" name="product-price" placeholder="Например, 200 000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="down-payment">Первоначальный взнос (₽)</label>
+                            <input type="number" id="down-payment" name="down-payment" placeholder="Например, 70 000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="term">Срок (месяцев)</label>
+                            <select id="term" name="term" required>
+                                <option value="2">2 месяца</option>
+                                <option value="3">3 месяца</option>
+                                <option value="4">4 месяца</option>
+                                <option value="5">5 месяцев</option>
+                                <option value="6" selected>6 месяцев</option>
+                                <option value="7">7 месяцев</option>
+                                <option value="8">8 месяцев</option>
+                                <option value="9">9 месяцев</option>
+                                <option value="10">10 месяцев</option>
+                                <option value="11">11 месяцев</option>
+                                <option value="12">12 месяцев</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="calculate-btn">Рассчитать</button>
+                    </form>
+                </section>
 
-                <footer>
-                    <p>© 2025 Vsay-rassrochka</p>
-                </footer>
-            </div>
-        </main>
+                <section id="results-section" class="card">
+                    <h2>Сравнение предложений</h2>
+                    <div id="results-container">
+                        <div class="placeholder">
+                            <p>Введите данные в калькулятор, чтобы увидеть здесь сравнение предложений.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
 
-        <!-- Правая колонка: пустая, JS сам заполнит -->
-        <aside class="side-media" data-slot="right" aria-label="Боковая колонка справа"></aside>
-    </div>
+            <footer>
+                <p>© 2025 Vsay-rassrochka</p>
+            </footer>
+        </div>
+    </main>
 
-    <script src="script.js"></script>
+    <aside class="ad-slot ad-right" aria-hidden="true">
+        <!-- Место для рекламы или пустое пространство -->
+    </aside>
+</div>
+
+<script src="script.js"></script>
 </body>
-
 </html>
