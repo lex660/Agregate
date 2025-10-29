@@ -11,52 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastCalculationInputs = {};
     let isLoading = false;
 
-  // =========================
-  // ЕДИНЫЙ МАССИВ МЕДИА (РОВНО 4 ЭЛЕМЕНТА)
-  // Порядок важен: [0,1] — слева; [2,3] — справа; на мобиле все 4 идут между тарифами
-  // =========================
-  const MEDIA_ITEMS = [
-    {
-      href: "https://www.google.com/",
-      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
-      alt: "Медиа 1",
-    },
-    {
-      href: "#",
-      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
-      alt: "Медиа 2",
-    },
-    {
-      href: "#",
-      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
-      alt: "Медиа 3",
-    },
-    {
-      href: "#",
-      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
-      alt: "Медиа 4",
-    },
-  ];
-
-  // после каких по счёту строк вставлять inline (1-based)
-  const INLINE_INSERT_POSITIONS = [1, 2, 3, 4];
-
-  // медиазапрос для переключения режимов
-  const mq = window.matchMedia("(max-width: 1024px)");
-  let lastInlineMode = mq.matches;
-
-  function isInlineMode() {
-    return mq.matches;
-  }
-
-  // =========================
-  // АНАЛИТИКА: посещение
-  // =========================
-  if (typeof ym === "function") {
-    try {
-      ym(ymCounterId, "reachGoal", "visit");
-    } catch (e) {
-      console.warn("ym error", e);
+    // ============================================
+    // АНАЛИТИКА: посещение страницы
+    // ============================================
+    if (typeof ym === 'function') {
+        try { ym(ymCounterId, 'reachGoal', 'visit'); } catch (e) { console.warn('ym error', e); }
     }
 
     // ============================================
@@ -117,30 +76,83 @@ document.addEventListener('DOMContentLoaded', () => {
     // API ЗАПРОСЫ
     // ============================================
     async function fetchAndDisplayResults(region, price, downPayment, term) {
-        try {
-            isLoading = true;
-            showLoadingState();
+        const MAX_RETRIES = 3;
+        const TIMEOUT_MS = 30000; // 30 seconds timeout
 
-            const response = await fetch(`${CLOUDFLARE_WORKER_URL}/api/calculate`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ region, price, downPayment, term })
-            });
+        // Check if user is online before making request
+        if (!navigator.onLine) {
+            showErrorState('Нет подключения к интернету. Проверьте сеть и попробуйте снова.');
+            return;
+        }
 
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
+        for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+            try {
+                isLoading = true;
+                showLoadingState();
+                console.log(term);
 
-            if (data.success === false && data.error === 'no_data') {
-                showNoDataState(data.message, data.failedBanks);
-            } else if (data.success && data.results) {
-                displayResults(data.results, data.warnings);
-            } else {
-                throw new Error(data.error || 'Неизвестная ошибка');
+                // Create AbortController for timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+                const response = await fetch(`${CLOUDFLARE_WORKER_URL}/api/calculate`, {
+                    method: 'POST',
+                    mode: 'cors', // Explicitly set CORS mode for Android
+                    cache: 'no-cache', // Prevent caching failed requests
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ region, price, downPayment, term }),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                if (data.success === false && data.error === 'no_data') {
+                    showNoDataState(data.message, data.failedBanks);
+                } else if (data.success && data.results) {
+                    displayResults(data.results, data.warnings);
+                } else {
+                    throw new Error(data.error || 'Неизвестная ошибка');
+                }
+
+                // Success - break retry loop
+                break;
+
+            } catch (error) {
+                console.error(`Attempt ${attempt + 1} failed:`, error);
+
+                // Check if it's the last attempt
+                if (attempt === MAX_RETRIES - 1) {
+                    // Provide more detailed error messages for Android debugging
+                    let errorMessage = 'Произошла ошибка при загрузке данных.';
+
+                    if (error.name === 'AbortError') {
+                        errorMessage = 'Превышено время ожидания ответа сервера. Проверьте подключение к интернету.';
+                    } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                        errorMessage = 'Не удалось подключиться к серверу. Проверьте интернет-соединение и попробуйте снова.';
+                    } else if (error.message.includes('HTTP error')) {
+                        errorMessage = 'Ошибка сервера. Попробуйте позже.';
+                    }
+
+                    showErrorState(errorMessage + '\n\nДетали: ' + (error.message || error.toString()));
+                } else {
+                    // Wait before retry (exponential backoff: 1s, 2s, 4s)
+                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+                }
+            } finally {
+                if (attempt === MAX_RETRIES - 1) {
+                    isLoading = false;
+                }
             }
-        } catch (error) {
-            showErrorState(error.message || error.toString());
-        } finally {
-            isLoading = false;
         }
     }
 
@@ -184,8 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="placeholder">
                     <p>❌ Нет доступных предложений для указанных параметров.</p>
                     <p>Попробуйте изменить условия рассрочки.</p>
-                    <p>Максимальная стоимость товара 1 000 000.</p>
-                    <p>Минимальный первоначальный взнос 25% от стоимости товара.</p>
                 </div>`;
             return;
         }
@@ -262,4 +272,3 @@ document.addEventListener('DOMContentLoaded', () => {
         // Для безопасности — не блокируем переход (ссылки открываются в _blank)
     });
 });
-
