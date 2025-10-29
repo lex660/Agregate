@@ -89,8 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 isLoading = true;
                 showLoadingState();
-                console.log(term);
-
                 // Create AbortController for timeout
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -114,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const data = await response.json();
-                console.log(data);
 
                 if (data.success === false && data.error === 'no_data') {
                     showNoDataState(data.message, data.failedBanks);
@@ -272,3 +269,4 @@ document.addEventListener('DOMContentLoaded', () => {
         // Для безопасности — не блокируем переход (ссылки открываются в _blank)
     });
 });
+
