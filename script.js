@@ -23,8 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
       alt: "Медиа 1",
     },
     {
-      href: "#",
-      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
+      href: "https://wa.me/+79604345577",
+      img: "https://github.com/lex660/Agregate/blob/main/Adab2_Left.png",
       alt: "Медиа 2",
     },
     {
@@ -33,8 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
       alt: "Медиа 3",
     },
     {
-      href: "#",
-      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
+      href: "https://wa.me/+79604345577",
+      img: "https://github.com/lex660/Agregate/blob/main/Adab1_R.png",
       alt: "Медиа 4",
     },
   ];
@@ -395,3 +395,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
