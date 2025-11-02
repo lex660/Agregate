@@ -18,22 +18,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   const MEDIA_ITEMS = [
     {
-      href: "https://www.google.com/",
-      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
+      href: "https://wa.me/79931700676?text=Ди%20дика%20хилда!%20Пишу%20с%20сайта%20vsay-rassrochka.ru.%20Хочу%20узнать%20подробнее%20о%20рекламе.",
+      img: "https://raw.githubusercontent.com/lex660/Agregate_1.1/main/reklama_v-r.png",
       alt: "Медиа 1",
     },
     {
-      href: "https://wa.me/+79604345577",
+      href: "https://wa.me/79604345577?text=Здравствуйте.%20Ди%20дика%20хилда!%20Пишу%20с%20сайта%20vsay-rassrochka.ru.%20Хочу%20узнать%20подробнее%20о%20смартфонах.",
       img: "https://raw.githubusercontent.com/lex660/Agregate/main/Adab2_Left.png",
       alt: "Медиа 2",
     },
     {
-      href: "#",
-      img: "https://www.pro-of.com.ua/wp-content/uploads/2018/02/ab35c5ac5b7d2dda5ddc48c01e4efa15.jpg",
+      href: "https://wa.me/79931700676?text=Ди%20дика%20хилда!%20Пишу%20с%20сайта%20vsay-rassrochka.ru.%20Хочу%20узнать%20подробнее%20о%20рекламе",
+      img: "https://raw.githubusercontent.com/lex660/Agregate_1.1/main/reklama_v-r.png",
       alt: "Медиа 3",
     },
     {
-      href: "https://wa.me/+79604345577",
+      href: "https://wa.me/79604345577?text=Здравствуйте.%20Ди%20дика%20хилда!%20Пишу%20с%20сайта%20vsay-rassrochka.ru.%20Хочу%20узнать%20подробнее%20о%20покупке%20телефона.",
       img: "https://raw.githubusercontent.com/lex660/Agregate/main/Adab1_R.png",
       alt: "Медиа 4",
     },
@@ -395,5 +395,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
 
