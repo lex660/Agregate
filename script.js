@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       href: "https://wa.me/+79604345577",
-      img: "https://github.com/lex660/Agregate/blob/main/Adab2_Left.png",
+      img: "https://raw.githubusercontent.com/lex660/Agregate/main/Adab2_Left.png",
       alt: "Медиа 2",
     },
     {
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       href: "https://wa.me/+79604345577",
-      img: "https://github.com/lex660/Agregate/blob/main/Adab1_R.png",
+      img: "https://raw.githubusercontent.com/lex660/Agregate/main/Adab1_R.png",
       alt: "Медиа 4",
     },
   ];
@@ -395,4 +395,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
