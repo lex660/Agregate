@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const MEDIA_ITEMS = [
     {
       href: "mailto:lex660@yandex.ru?body=Здравствуйте!%20Пишу%20с%20сайта%20vsay-rassrochka.ru.%20Хочу%20узнать%20подробнее%20о%20рекламе.",
-      img: "https://raw.githubusercontent.com/lex660/Agregate_1.1/main/reklama_v-r.png",
+      img: "https://raw.githubusercontent.com/lex660/Agregate_1.1/main/Market.png",
       alt: "Медиа 1",
     },
     {
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       href: "https://wa.me/79931700676?text=Ди%20дика%20хилда!%20Пишу%20с%20сайта%20vsay-rassrochka.ru.%20Хочу%20узнать%20подробнее%20о%20рекламе",
-      img: "https://raw.githubusercontent.com/lex660/Agregate_1.1/main/reklama_v-r.png",
+      img: "https://raw.githubusercontent.com/lex660/Agregate_1.1/main/Market.png",
       alt: "Медиа 3",
     },
     {
