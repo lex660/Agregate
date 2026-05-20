@@ -321,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .map((result, index) => {
                   const noteHtml = result.note
                     ? `<span class="bank-note">${result.note}</span>`
-                    : `<span class="bank-note">Общая стоимость: ${result.totalCost.toLocaleString()}₽, платеж ${result.monthlyPayment.toLocaleString()}₽/мес., мин. взнос 25%</span>`;
+                    : `<span class="bank-note">Общая стоимость: ${result.totalCost.toLocaleString()}₽, платеж ${result.monthlyPayment.toLocaleString()}₽/мес.</span>`;
                   const best =
                     index === 0
                       ? '<span class="best-deal-badge">🏆 Лучшее</span>'
