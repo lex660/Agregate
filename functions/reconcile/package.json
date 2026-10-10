@@ -1,0 +1,9 @@
+{
+  "name": "tariff-reconcile",
+  "private": true,
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node -e \"import('./index.mjs').then(m=>m.run()).then(r=>console.log(JSON.stringify(r,null,2)))\""
+  }
+}
