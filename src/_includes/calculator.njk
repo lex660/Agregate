@@ -1,0 +1,79 @@
+{#- Калькулятор. Переменная preRegion задаёт выбранный регион. -#}
+<section class="calc card" aria-labelledby="calc-title">
+  <h2 id="calc-title">Параметры покупки</h2>
+  <form id="calc-form" novalidate>
+    <label class="field">
+      <span>Регион прописки</span>
+      <select name="region" id="f-region">
+        {% for r in tariffs.regions %}<option value="{{ r.id }}"{% if r.id == preRegion %} selected{% endif %}>{{ r.name }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="field">
+      <span>Стоимость товара, ₽</span>
+      <input name="price" id="f-price" inputmode="numeric" autocomplete="off" placeholder="100 000" value="100 000" required>
+    </label>
+    <label class="field">
+      <span>Первоначальный взнос, ₽</span>
+      <input name="down" id="f-down" inputmode="numeric" autocomplete="off" placeholder="25 000" value="25 000">
+      <span class="hint" id="f-down-pct" aria-live="polite"></span>
+    </label>
+    <label class="field">
+      <span>Срок, месяцев: <output id="f-term-out" for="f-term">6</output></span>
+      <input type="range" name="term" id="f-term" min="1" max="36" step="1" value="6">
+      <span class="chips" role="group" aria-label="Быстрый выбор срока">
+        {% for m in [3, 6, 10, 12, 18, 24] %}<button type="button" class="chip" data-term="{{ m }}">{{ m }}</button>{% endfor %}
+      </span>
+    </label>
+    <p class="form-error" id="f-error" role="alert" hidden></p>
+    <button type="submit" class="btn btn--primary">Сравнить предложения</button>
+  </form>
+</section>
+
+<section class="results" aria-labelledby="res-title">
+  <div class="results__head">
+    <h2 id="res-title">Предложения</h2>
+    <p class="muted" id="res-summary" aria-live="polite">Укажите сумму, взнос и срок — посчитаем у всех компаний региона.</p>
+  </div>
+  <div id="res-list" class="res-list"></div>
+  <p class="muted small">Сортировка — по итоговой стоимости покупки. Мы не получаем оплату за место в списке.</p>
+</section>
+
+<template id="tpl-offer">
+  <article class="offer">
+    <header class="offer__head">
+      <div>
+        <h3 class="offer__name"></h3>
+        <p class="offer__tariff"></p>
+      </div>
+      <span class="badge" hidden></span>
+    </header>
+    <dl class="offer__nums">
+      <div class="num num--main"><dt>В месяц</dt><dd data-k="monthly"></dd></div>
+      <div class="num"><dt>Наценка</dt><dd data-k="markup"></dd></div>
+      <div class="num"><dt>Итого за товар</dt><dd data-k="total"></dd></div>
+      <div class="num"><dt>Взнос</dt><dd data-k="down"></dd></div>
+    </dl>
+    <p class="offer__note" hidden></p>
+    <p class="offer__legal"></p>
+    <p class="offer__meta"></p>
+    <div class="offer__actions">
+      <a class="btn btn--primary bank-link" target="_blank" rel="noopener nofollow sponsored">Перейти на сайт</a>
+      <button type="button" class="btn btn--ghost copy-btn">Скопировать расчёт</button>
+    </div>
+  </article>
+</template>
+
+{#- Реклама без рекламодателя и erid не показывается, даже если включена -#}
+{%- set activeAds = ads | activeAds -%}
+{% if activeAds.length %}
+<aside class="ads" aria-label="Реклама и партнёры" id="ads-pool">
+  {% for ad in activeAds %}
+  <a class="ad" href="{{ ad.href | url if ad.href.startsWith('/') else ad.href }}"{% if not ad.href.startsWith('/') %} target="_blank" rel="noopener nofollow sponsored"{% endif %}>
+    <img src="{{ ad.img | url }}" alt="{{ ad.alt }}" loading="lazy" decoding="async" width="600" height="600">
+    {% if ad.is_ad %}<span class="ad__label">Реклама · {{ ad.advertiser }}{% if ad.inn %}, ИНН {{ ad.inn }}{% endif %} · erid: {{ ad.erid }}</span>{% endif %}
+  </a>
+  {% endfor %}
+</aside>
+{% endif %}
+
+<script type="application/json" id="tariffs-data">{{ tariffs | json | safe }}</script>
