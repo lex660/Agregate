@@ -1,0 +1,37 @@
+[
+  {
+    "id": "self-promo",
+    "active": true,
+    "is_ad": false,
+    "img": "/assets/img/Market.png",
+    "alt": "Разместите рекламу на сайте",
+    "href": "/reklama/",
+    "advertiser": null,
+    "inn": null,
+    "erid": null
+  },
+  {
+    "id": "adab-phones-1",
+    "active": false,
+    "is_ad": true,
+    "img": "/assets/img/Adab1_R.png",
+    "alt": "Смартфоны в рассрочку",
+    "href": "https://wa.me/79604345577",
+    "advertiser": null,
+    "inn": null,
+    "erid": null,
+    "comment": "Выключено до получения данных рекламодателя и токена ERID (маркировка по ст. 18.1 ФЗ «О рекламе»)."
+  },
+  {
+    "id": "adab-phones-2",
+    "active": false,
+    "is_ad": true,
+    "img": "/assets/img/Adab2_Left.png",
+    "alt": "Смартфоны в рассрочку",
+    "href": "https://wa.me/79604345577",
+    "advertiser": null,
+    "inn": null,
+    "erid": null,
+    "comment": "Выключено до получения данных рекламодателя и токена ERID."
+  }
+]

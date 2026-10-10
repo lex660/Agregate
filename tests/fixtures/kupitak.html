@@ -1,0 +1,20 @@
+<script>
+		const homeCalc = document.querySelector(".jsCreateHomeCalculator")
+			? createCalculator(".jsCreateHomeCalculator", {
+				initialCost: 500000,
+				maxCost: 2000000,
+				tariffs: {
+					ingushetia: {
+						minDownPercent: 0,
+						maxCost: 2000000,
+						markupPercents: [10, 16, 22, 28, 31, 34, 37, 40, 43, 47, 51, 56, 59, 63, 66, 69, 72, 75, 78, 81, 84, 87, 90, 93]
+					},
+					chechnya: {
+						minDownPercent: 25,
+						maxCost: 800000,
+						minTerm: 4,
+						markupPercents: [5.33333, 10.66666, 16, 21.33333, 26.66666, 32, 37.33333, 42.66666, 48, 53.33333, 58.66666, 64]
+					}
+				}
+			}) : null;
+</script>

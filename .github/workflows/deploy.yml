@@ -1,0 +1,77 @@
+name: Проверка и публикация
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Адрес сайта. Пока домена нет — GitHub Pages. Когда будет домен, задать переменную репозитория SITE_URL.
+      SITE_URL: ${{ vars.SITE_URL || 'https://lex660.github.io/Agregate' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Тесты расчёта на эталонах
+        run: npm test
+      - name: Сборка
+        run: npm run build
+      - name: Проверка ссылок, CSP, дисклеймера, sitemap
+        run: npm run check
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: _site
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: site
+          path: _site
+
+  # Основной хостинг — Yandex Object Storage. Включается, когда в репозитории заданы секреты
+  # YC_ACCESS_KEY_ID, YC_SECRET_ACCESS_KEY и переменная YC_BUCKET (см. РУКОВОДСТВО.md).
+  deploy-yandex:
+    needs: build
+    if: github.event_name != 'pull_request' && vars.YC_BUCKET != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: _site
+      - name: Загрузка в Object Storage
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ru-central1
+        run: |
+          EP=https://storage.yandexcloud.net
+          B=s3://${{ vars.YC_BUCKET }}
+          # HTML и sitemap — без долгого кеша, чтобы новые тарифы сразу были видны
+          aws s3 sync _site "$B" --endpoint-url $EP --delete --exclude "assets/*" --cache-control "public, max-age=300"
+          aws s3 sync _site/assets "$B/assets" --endpoint-url $EP --delete --cache-control "public, max-age=86400"
+
+  # Временный хостинг, пока не настроен Yandex Object Storage.
+  deploy-pages:
+    needs: build
+    if: github.event_name != 'pull_request' && vars.YC_BUCKET == ''
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
