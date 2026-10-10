@@ -173,14 +173,15 @@ function placeAds(cards) {
   if (!adsPool) return;
   const ads = [...adsPool.children];
   if (!ads.length) return;
-  // На телефоне баннер встаёт после 2-й и 5-й карточки, на компьютере — колонка сбоку.
+  // На телефоне карточки идут по очереди: предложение, баннер, предложение, баннер…
+  // Каждый баннер показывается один раз; когда баннеры кончились — дальше только предложения.
+  // На компьютере баннеры — колонкой сбоку.
   const mobile = window.matchMedia("(max-width: 1023px)").matches;
   adsPool.hidden = mobile;
   list.querySelectorAll(".ad--inline").forEach((a) => a.remove());
   if (!mobile) return;
-  [2, 5].slice(0, ads.length).forEach((pos, i) => {
-    const ad = ads[i];
-    const anchor = cards[pos - 1];
+  ads.forEach((ad, i) => {
+    const anchor = cards[i];
     if (!anchor) return;
     const clone = ad.cloneNode(true);
     clone.classList.add("ad--inline");
