@@ -111,9 +111,9 @@ export function compareAll(data, site) {
       const t = T(id);
       if (!site.tasnim[key]) { diffs.push(`Tasnim: на сайте нет тарифа ${key}`); continue; }
       // Сравниваем только сроки, которые мы показываем
-      const inRange = ([m]) => Number(m) >= t.min_term && Number(m) <= t.max_term;
+      const inRange = ([m]) => Number(m) >= t.minContractMonthCount && Number(m) <= t.maxContractMonthCount;
       const actual = Object.fromEntries(Object.entries(site.tasnim[key]).filter(inRange));
-      const expected = Object.fromEntries(Object.entries(t.rate).filter(inRange));
+      const expected = Object.fromEntries(Object.entries(t.coefTable).filter(inRange));
       diffTable(`Tasnim ${t.tariff}`, expected, actual, diffs);
     }
   }
@@ -121,13 +121,13 @@ export function compareAll(data, site) {
   if (site.kupitak) {
     const asTable = (arr) => Object.fromEntries(arr.map((v, i) => [String(i + 1), v]));
     const k = T("kupitak");
-    diffTable("КупиТак", k.rate, asTable(site.kupitak.ingushetia.markupPercents), diffs);
-    if (site.kupitak.ingushetia.maxCost && site.kupitak.ingushetia.maxCost !== k.max_price) diffs.push(`КупиТак: макс. сумма у нас ${k.max_price}, на сайте ${site.kupitak.ingushetia.maxCost}`);
+    diffTable("КупиТак", k.percentTable, asTable(site.kupitak.ingushetia.markupPercents), diffs);
+    if (site.kupitak.ingushetia.maxCost && site.kupitak.ingushetia.maxCost !== k.maxGoodsCost) diffs.push(`КупиТак: макс. стоимость товара у нас ${k.maxGoodsCost}, на сайте ${site.kupitak.ingushetia.maxCost}`);
     if (site.kupitak.chechnya) {
       const f = T("fincity");
-      diffTable("FinCity", f.rate, asTable(site.kupitak.chechnya.markupPercents), diffs);
-      if (site.kupitak.chechnya.minTerm && site.kupitak.chechnya.minTerm !== f.min_term) diffs.push(`FinCity: мин. срок у нас ${f.min_term}, на сайте ${site.kupitak.chechnya.minTerm}`);
-      if (site.kupitak.chechnya.maxCost && site.kupitak.chechnya.maxCost !== f.max_price) diffs.push(`FinCity: макс. сумма у нас ${f.max_price}, на сайте ${site.kupitak.chechnya.maxCost}`);
+      diffTable("FinCity", f.percentTable, asTable(site.kupitak.chechnya.markupPercents), diffs);
+      if (site.kupitak.chechnya.minTerm && site.kupitak.chechnya.minTerm !== f.minContractMonthCount) diffs.push(`FinCity: мин. срок у нас ${f.minContractMonthCount}, на сайте ${site.kupitak.chechnya.minTerm}`);
+      if (site.kupitak.chechnya.maxCost && site.kupitak.chechnya.maxCost !== f.maxGoodsCost) diffs.push(`FinCity: макс. стоимость товара у нас ${f.maxGoodsCost}, на сайте ${site.kupitak.chechnya.maxCost}`);
     } else {
       diffs.push("FinCity: сетка пропала с сайта kupitak.ru");
     }
@@ -138,25 +138,26 @@ export function compareAll(data, site) {
     for (const s of site.lariba) {
       const t = ours.find((o) => o.tariff === s.name);
       if (!t) { diffs.push(`LaRiba: на сайте новый тариф «${s.name}» (${s.percent}%/мес)`); continue; }
-      if (!close(t.rate.monthly * 100, s.percent)) diffs.push(`LaRiba ${s.name}: у нас ${t.rate.monthly * 100}%/мес, на сайте ${s.percent}%`);
-      const pairs = [["min_price", s.minGoodsCost], ["max_price", s.maxGoodsCost], ["zero_down_up_to", s.zeroInitialPaymentUpTo], ["min_down_pct", s.minInitialPaymentPercent], ["max_down_pct", s.maxInitialPaymentPercent], ["max_financing", s.maxFinancingAmount], ["min_term", s.minContractMonthCount], ["max_term", s.maxContractMonthCount]];
-      for (const [k, v] of pairs) if (v !== undefined && v !== t[k]) diffs.push(`LaRiba ${s.name}: ${k} у нас ${t[k]}, на сайте ${v}`);
-      if (s.minMarkup !== undefined && s.minMarkup !== t.rate.min_markup) diffs.push(`LaRiba ${s.name}: мин. наценка у нас ${t.rate.min_markup}, на сайте ${s.minMarkup}`);
+      if (!close(t.percent, s.percent)) diffs.push(`LaRiba ${s.name}: у нас ${t.percent}%/мес, на сайте ${s.percent}%`);
+      // Схема 2: наши имена полей совпадают с именами в JSON ЛяРибы, поэтому сверка
+      // идёт один к одному. Ни одно ограничение не сопоставляется с соседним по смыслу.
+      const mirrored = ["minGoodsCost", "maxGoodsCost", "minFinancingAmount", "maxFinancingAmount", "zeroInitialPaymentUpTo", "minInitialPaymentPercent", "maxInitialPaymentPercent", "minContractMonthCount", "maxContractMonthCount", "guarantorCount", "minMarkup"];
+      for (const k of mirrored) if (s[k] !== undefined && s[k] !== t[k]) diffs.push(`LaRiba ${s.name}: ${k} у нас ${t[k]}, на сайте ${s[k]}`);
     }
     for (const t of ours) if (!site.lariba.some((s) => s.name === t.tariff)) diffs.push(`LaRiba: тариф «${t.tariff}» пропал с сайта`);
   }
 
   if (site.vatan) {
-    const r = T("vatan").rate;
-    const ours = { proc1: r.bands[0].per_month, proc2: r.bands[1].per_month, proc3: r.bands[2].per_month, proc4: r.bands[3].per_month, proc5: r.annual_above * 100 };
+    const r = T("vatan");
+    const ours = { proc1: r.bands[0].per_month, proc2: r.bands[1].per_month, proc3: r.bands[2].per_month, proc4: r.bands[3].per_month, proc5: r.annualPercent };
     for (const [k, v] of Object.entries(ours)) if (!close(v, site.vatan[k])) diffs.push(`Ватан ${k}: у нас ${v}, на сайте ${site.vatan[k]}`);
-    for (const fee of [r.service_fee, r.service_fee_zero_down]) if (!site.vatan.fees.includes(fee)) diffs.push(`Ватан: плата за обслуживание ${fee} ₽ не найдена на сайте (там ${site.vatan.fees.join(", ")})`);
+    for (const fee of [r.serviceFee, r.serviceFeeZeroDown]) if (!site.vatan.fees.includes(fee)) diffs.push(`Ватан: плата за обслуживание ${fee} ₽ не найдена на сайте (там ${site.vatan.fees.join(", ")})`);
   }
 
   if (site.alBaraka) {
     const map = { standard: "al-baraka-standard", ideal: "al-baraka-ideal" };
     for (const [k, id] of Object.entries(map)) {
-      if (!close(T(id).rate.annual, site.alBaraka.rates[k])) diffs.push(`Al-Baraka ${k}: у нас ${T(id).rate.annual}, на сайте ${site.alBaraka.rates[k]}`);
+      if (!close(T(id).annualPercent / 100, site.alBaraka.rates[k])) diffs.push(`Al-Baraka ${k}: у нас ${T(id).annualPercent / 100}, на сайте ${site.alBaraka.rates[k]}`);
     }
     if (!site.alBaraka.ceil100) diffs.push("Al-Baraka: изменилось округление платежа (раньше вверх до 100 ₽)");
   }
@@ -166,6 +167,6 @@ export function compareAll(data, site) {
 
 export function staleCompanies(data, now = new Date(), days = 30) {
   return data.companies
-    .filter((c) => c.verified_at && (now - new Date(c.verified_at)) / 86400000 > days)
-    .map((c) => `${c.name}: условия не перепроверялись больше ${days} дней (с ${c.verified_at})`);
+    .filter((c) => c.checkedAt && (now - new Date(c.checkedAt)) / 86400000 > days)
+    .map((c) => `${c.name}: условия не перепроверялись больше ${days} дней (с ${c.checkedAt})`);
 }

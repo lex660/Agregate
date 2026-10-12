@@ -55,8 +55,8 @@ for (const m of sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)) {
 
 const today = new Date();
 for (const c of data.companies) {
-  if (!c.verified_at) { warn.push(`${c.name}: условия не подтверждены`); continue; }
-  const age = (today - new Date(c.verified_at)) / 86400000;
+  if (!c.checkedAt) { warn.push(`${c.name}: условия не подтверждены`); continue; }
+  const age = (today - new Date(c.checkedAt)) / 86400000;
   if (age > 30) warn.push(`${c.name}: условия проверялись ${Math.floor(age)} дн. назад (больше 30)`);
 }
 
