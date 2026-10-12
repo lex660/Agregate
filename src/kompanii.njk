@@ -18,8 +18,8 @@ permalink: /kompanii/
       {% if c.inn %}<dt>ИНН</dt><dd>{{ c.inn }}</dd>{% endif %}
       {% if c.ogrn %}<dt>ОГРН/ОГРНИП</dt><dd>{{ c.ogrn }}</dd>{% endif %}
       {% if c.cbr_registry %}<dt>Реестр Банка России</dt><dd>{{ c.cbr_registry }}</dd>{% endif %}
-      <dt>Сайт</dt><dd>{% if c.url %}<a href="{{ c.url }}" target="_blank" rel="noopener nofollow sponsored">{{ c.url | replace("https://", "") | replace("/", "") }}</a>{% else %}уточняется{% endif %}</dd>
-      <dt>Условия</dt><dd>{% if c.confirmation == "pending" %}уточняются — компания не публикует ставки{% else %}по публичному калькулятору компании, проверено {{ c.verified_at | ruDate }}{% endif %}</dd>
+      <dt>Сайт</dt><dd>{% if c.url and "https://" in c.url %}<a href="{{ c.url }}" target="_blank" rel="noopener nofollow sponsored">{{ c.url | replace("https://", "") | replace("/", "") }}</a>{% elif c.url %}{{ c.url | replace("http://", "") | replace("/", "") }} <span class="muted">(сайт без HTTPS — ссылку не ставим)</span>{% else %}уточняется{% endif %}</dd>
+      <dt>Условия</dt><dd>{% if c.confirmation == "pending" %}уточняются — компания не публикует ставки{% else %}по публичному калькулятору компании, проверено {{ c.checkedAt | ruDate }}{% endif %}</dd>
       <dt>Источник</dt><dd class="small">{{ c.source }}</dd>
       {% if c.notes %}<dt>Примечание</dt><dd class="small">{{ c.notes }}</dd>{% endif %}
     </dl>

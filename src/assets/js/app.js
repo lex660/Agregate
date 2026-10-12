@@ -136,8 +136,8 @@ function renderOffer(r, input, index) {
     n.textContent = r.note;
   }
   setText(node, ".offer__legal", legalLine(r.company));
-  const meta = r.company.verified_at
-    ? `Условия с сайта компании, проверено ${r.company.verified_at.split("-").reverse().join(".")}`
+  const meta = r.company.checkedAt
+    ? `Условия с сайта компании, проверено ${r.company.checkedAt.split("-").reverse().join(".")}`
     : "Ставки компанией не опубликованы";
   setText(node, ".offer__meta", meta);
 

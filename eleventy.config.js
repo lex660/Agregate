@@ -1,3 +1,5 @@
+import { limitsSummary } from "./src/assets/js/calc.js";
+
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
   eleventyConfig.addPassthroughCopy({ "src/yandex_49e44b65439ecbfe.html": "yandex_49e44b65439ecbfe.html" });
@@ -17,6 +19,9 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("byRegion", (companies, regionId) => companies.filter((c) => c.regions.includes(regionId)));
   eleventyConfig.addFilter("activeAds", (ads) => ads.filter((a) => a.active && (!a.is_ad || (a.erid && a.advertiser))));
   eleventyConfig.addFilter("tariffsOf", (tariffs, companyId) => tariffs.filter((t) => t.company === companyId));
+  // Перечень лимитов тарифа: каждое ограничение названо отдельно.
+  // Сводить стоимость товара и сумму финансирования в одно «до N ₽» нельзя.
+  eleventyConfig.addFilter("limits", (t) => limitsSummary(t));
 
   return {
     dir: { input: "src", output: "_site", includes: "_includes", data: "_data" },

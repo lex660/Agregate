@@ -30,8 +30,8 @@ eleventyComputed:
         <p class="small">Юрлицо: {{ c.legal_entity or "не опубликовано на сайте компании" }}{% if c.inn %} · ИНН {{ c.inn }}{% endif %}{% if c.ogrn %} · ОГРН {{ c.ogrn }}{% endif %}</p>
         {% set ts = tariffs.tariffs | tariffsOf(c.id) %}
         {% if ts.length %}
-          <p class="small">Тарифы: {% for t in ts %}{{ t.tariff }} ({{ t.min_term }}–{{ t.max_term }} мес., до {{ t.max_price | rub }}){% if not loop.last %}; {% endif %}{% endfor %}</p>
-          <p class="small muted">Проверено {{ c.verified_at | ruDate }} по публичному калькулятору компании.</p>
+          <p class="small">Тарифы: {% for t in ts %}{{ t.tariff }} — {{ t | limits }}{% if not loop.last %}; {% endif %}{% endfor %}</p>
+          <p class="small muted">Проверено {{ c.checkedAt | ruDate }} по публичному калькулятору компании.</p>
         {% else %}
           <p class="small muted">Условия уточняются: компания не публикует ставки. {{ c.notes }}</p>
         {% endif %}

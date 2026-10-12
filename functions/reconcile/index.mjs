@@ -71,7 +71,7 @@ export async function run() {
   if (errors.length) lines.push("❌ Сверка не прошла:", ...errors.map((d) => "• " + d), "");
   if (stale.length) lines.push("🕒 Давно не проверялись:", ...stale.map((d) => "• " + d), "");
   if (ok) lines.unshift("✅ Тарифы на сайтах совпадают с tariffs.json.");
-  lines.push("Изменения в tariffs.json вносятся только через PR с новыми verified_at и source.");
+  lines.push("Изменения в tariffs.json вносятся только через PR с новыми checkedAt и source.");
 
   if (!ok || stale.length || process.env.SEND_OK === "1") await telegram(lines.join("\n"));
   return { ok, diffs, errors, stale };
