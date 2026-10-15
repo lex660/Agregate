@@ -1,0 +1,67 @@
+name: Сверка тарифов
+
+# Раз в сутки читает публичные калькуляторы компаний и сравнивает с data/tariffs.json.
+# Нашлось расхождение или сайт не прочитался — открывает issue с меткой data-drift
+# (или обновляет уже открытый). Когда всё снова совпадает — закрывает его.
+# Данные сама не меняет: правка tariffs.json — только через PR с новыми checkedAt и source.
+on:
+  schedule:
+    - cron: "17 6 * * *" # 09:17 по Москве
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: reconcile
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Сверка с сайтами компаний
+        id: run
+        continue-on-error: true
+        run: node scripts/reconcile.mjs report.md
+
+      - name: Открыть, обновить или закрыть issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTCOME: ${{ steps.run.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          LABEL=data-drift
+          gh label create "$LABEL" --color D93F0B --description "Условия на сайтах компаний расходятся с tariffs.json" --force >/dev/null
+          NUM=$(gh issue list --label "$LABEL" --state open --limit 1 --json number --jq '.[0].number // empty')
+          {
+            echo "Автоматическая сверка от $(date -u +%d.%m.%Y) — [журнал запуска]($RUN_URL)."
+            echo
+            cat report.md
+          } > body.md
+
+          if [ "$OUTCOME" = "success" ]; then
+            if [ -n "$NUM" ]; then
+              gh issue comment "$NUM" --body "Сверка $(date -u +%d.%m.%Y) прошла: условия на сайтах совпадают с tariffs.json. Закрываю. [Журнал]($RUN_URL)"
+              gh issue close "$NUM"
+            fi
+            exit 0
+          fi
+
+          if [ -z "$NUM" ]; then
+            gh issue create --title "Сверка тарифов: условия на сайтах компаний изменились" --label "$LABEL" --body-file body.md
+            exit 0
+          fi
+
+          # Уже открыт: обновляем текст и пишем комментарий, только если список расхождений изменился
+          OLD=$(gh issue view "$NUM" --json body --jq .body | sed '1,2d')
+          if [ "$OLD" != "$(cat report.md)" ]; then
+            gh issue edit "$NUM" --body-file body.md
+            gh issue comment "$NUM" --body "Список расхождений изменился $(date -u +%d.%m.%Y). [Журнал]($RUN_URL)"
+          fi

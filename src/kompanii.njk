@@ -1,0 +1,31 @@
+---
+title: "Компании исламской рассрочки — реквизиты и источники данных"
+description: "Список компаний исламской рассрочки в сравнении: юрлицо, ИНН, регион, тарифы, откуда взяты условия и когда проверены."
+permalink: /kompanii/
+---
+{% extends "base.njk" %}
+{% block content %}
+<div class="wrap prose">
+  <h1>Компании и источники данных</h1>
+  <p>Для каждой компании указываем юрлицо, откуда взяты условия и дату последней проверки. Если компания не публикует ставки, мы не придумываем цифры — она есть в списке, но без расчёта.</p>
+  {% for r in tariffs.regions %}
+  <h2>{{ r.name }}</h2>
+  {% for c in tariffs.companies | byRegion(r.id) %}
+  <section class="card co-card">
+    <h3>{{ c.name }}</h3>
+    <dl class="kv">
+      <dt>Юрлицо</dt><dd>{{ c.legal_entity or "не опубликовано на сайте компании, запрошено" }}</dd>
+      {% if c.inn %}<dt>ИНН</dt><dd>{{ c.inn }}</dd>{% endif %}
+      {% if c.ogrn %}<dt>ОГРН/ОГРНИП</dt><dd>{{ c.ogrn }}</dd>{% endif %}
+      {% if c.cbr_registry %}<dt>Реестр Банка России</dt><dd>{{ c.cbr_registry }}</dd>{% endif %}
+      <dt>Сайт</dt><dd>{% if c.url and "https://" in c.url %}<a href="{{ c.url }}" target="_blank" rel="noopener nofollow sponsored">{{ c.url | replace("https://", "") | replace("/", "") }}</a>{% elif c.url %}{{ c.url | replace("http://", "") | replace("/", "") }} <span class="muted">(сайт без HTTPS — ссылку не ставим)</span>{% else %}уточняется{% endif %}</dd>
+      <dt>Условия</dt><dd>{% if c.confirmation == "pending" %}уточняются — компания не публикует ставки{% else %}по публичному калькулятору компании, проверено {{ c.checkedAt | ruDate }}{% endif %}</dd>
+      <dt>Источник</dt><dd class="small">{{ c.source }}</dd>
+      {% if c.notes %}<dt>Примечание</dt><dd class="small">{{ c.notes }}</dd>{% endif %}
+    </dl>
+  </section>
+  {% endfor %}
+  {% endfor %}
+  <p class="muted">Вы представляете компанию и хотите исправить или дополнить данные? Напишите нам — пришлите условия письменно, и мы обновим карточку с пометкой «подтверждено компанией».</p>
+</div>
+{% endblock %}

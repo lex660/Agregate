@@ -1,0 +1,19 @@
+[
+  {
+    "enabled": true,
+    "name": "Супер",
+    "description": "Только для самостоятельного оформления",
+    "percent": 3.8,
+    "minGoodsCost": 1000,
+    "maxGoodsCost": 1000000,
+    "zeroInitialPaymentUpTo": 50000,
+    "minInitialPaymentPercent": 25,
+    "maxInitialPaymentPercent": 90,
+    "maxFinancingAmount": 400000,
+    "guarantorCount": 0,
+    "defaultContractMonthCount": 6,
+    "minContractMonthCount": 1,
+    "maxContractMonthCount": 12,
+    "minMarkup": 500
+  }
+]

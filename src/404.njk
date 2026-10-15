@@ -1,0 +1,13 @@
+---
+title: "Страница не найдена"
+description: "Такой страницы нет."
+permalink: /404.html
+eleventyExcludeFromCollections: true
+---
+{% extends "base.njk" %}
+{% block content %}
+<div class="wrap prose">
+  <h1>Страница не найдена</h1>
+  <p><a href="{{ '/' | url }}">Перейти к сравнению рассрочки</a></p>
+</div>
+{% endblock %}

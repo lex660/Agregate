@@ -1,0 +1,15 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>{{ site.url }}/</loc><lastmod>{{ tariffs.updated_at }}</lastmod></url>
+{%- for r in tariffs.regions %}
+  <url><loc>{{ site.url }}/{{ r.id }}/</loc><lastmod>{{ tariffs.updated_at }}</lastmod></url>
+{%- endfor %}
+  <url><loc>{{ site.url }}/kompanii/</loc><lastmod>{{ tariffs.updated_at }}</lastmod></url>
+  <url><loc>{{ site.url }}/o-proekte/</loc></url>
+  <url><loc>{{ site.url }}/reklama/</loc></url>
+  <url><loc>{{ site.url }}/politika/</loc><lastmod>{{ site.policyDate }}</lastmod></url>
+</urlset>

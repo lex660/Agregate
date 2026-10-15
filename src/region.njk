@@ -1,0 +1,44 @@
+---
+pagination:
+  data: tariffs.regions
+  size: 1
+  alias: region
+permalink: "/{{ region.id }}/"
+eleventyComputed:
+  title: "Исламская рассрочка {{ region.name_in }} — сравнение условий компаний"
+  description: "Рассрочка без процентов {{ region.name_in }}: сравните наценку, ежемесячный платёж и взнос у компаний региона. Данные с сайтов компаний, дата проверки указана."
+  preRegion: "{{ region.id }}"
+---
+{% extends "base.njk" %}
+{% block content %}
+{%- set regionCompanies = tariffs.companies | byRegion(region.id) -%}
+<div class="wrap">
+  <section class="hero">
+    <h1>Исламская рассрочка {{ region.name_in }}</h1>
+    <p class="lead">Компаний в сравнении: {{ regionCompanies.length }}. Укажите покупку — покажем платёж и наценку у каждой.</p>
+  </section>
+  <div class="layout">
+    {% include "calculator.njk" %}
+  </div>
+
+  <section class="card companies" aria-labelledby="co-title">
+    <h2 id="co-title">Компании {{ region.name_in }}</h2>
+    <ul class="co-list">
+    {% for c in regionCompanies %}
+      <li>
+        <h3>{{ c.name }}</h3>
+        <p class="small">Юрлицо: {{ c.legal_entity or "не опубликовано на сайте компании" }}{% if c.inn %} · ИНН {{ c.inn }}{% endif %}{% if c.ogrn %} · ОГРН {{ c.ogrn }}{% endif %}</p>
+        {% set ts = tariffs.tariffs | tariffsOf(c.id) %}
+        {% if ts.length %}
+          <p class="small">Тарифы: {% for t in ts %}{{ t.tariff }} — {{ t | limits }}{% if not loop.last %}; {% endif %}{% endfor %}</p>
+          <p class="small muted">Проверено {{ c.checkedAt | ruDate }} по публичному калькулятору компании.</p>
+        {% else %}
+          <p class="small muted">Условия уточняются: компания не публикует ставки. {{ c.notes }}</p>
+        {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}<script type="module" src="{{ '/assets/js/app.js' | url }}?v={{ site.buildDate }}"></script>{% endblock %}

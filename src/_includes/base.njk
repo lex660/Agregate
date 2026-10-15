@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {#- CSP: только свои скрипты и Яндекс.Метрика. При добавлении нового внешнего ресурса — обновить здесь. -#}
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yastatic.net; connect-src 'self' https://mc.yandex.ru https://mc.yandex.com wss://mc.yandex.ru wss://mc.yandex.com; img-src 'self' data: https://mc.yandex.ru https://mc.yandex.com; style-src 'self' 'unsafe-inline'; frame-src blob: https://mc.yandex.ru https://mc.yandex.com; child-src blob: https://mc.yandex.ru https://mc.yandex.com; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ description }}">
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <meta name="theme-color" content="#0f5c4a">
+  <link rel="icon" href="{{ '/assets/img/icon.svg' | url }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | url }}?v={{ site.buildDate }}">
+  {#- Метрика загружается только после согласия: см. consent.js и блок #consent ниже -#}
+  <script src="{{ '/assets/js/consent.js' | url }}?v={{ site.buildDate }}" data-counter="{{ site.metrikaId }}" defer></script>
+  {% if jsonld %}<script type="application/ld+json">{{ jsonld | json | safe }}</script>{% endif %}
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar__in">
+      <a class="logo" href="{{ '/' | url }}">Сравни<span>рассрочку</span></a>
+      <nav class="nav" aria-label="Разделы">
+        {% for r in tariffs.regions %}<a href="{{ ('/' + r.id + '/') | url }}"{% if page.url == '/' + r.id + '/' %} aria-current="page"{% endif %}>{{ r.name }}</a>{% endfor %}
+        <a href="{{ '/kompanii/' | url }}"{% if page.url == '/kompanii/' %} aria-current="page"{% endif %}>Компании</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p class="disclaimer"><strong>Важно.</strong> Сайт сравнивает публичные условия исламской рассрочки (мурабаха) и не является кредитной организацией, продавцом или представителем компаний. Расчёты справочные и не являются офертой. Окончательные условия, наценку и решение об одобрении определяет компания. Перед оформлением сверяйте условия на её сайте и в договоре.</p>
+      <nav class="footer__nav" aria-label="Служебные страницы">
+        <a href="{{ '/o-proekte/' | url }}">Как мы считаем</a>
+        <a href="{{ '/kompanii/' | url }}">Компании и источники</a>
+        <a href="{{ '/reklama/' | url }}">Реклама на сайте</a>
+        <a href="{{ '/politika/' | url }}">Политика обработки персональных данных</a>
+        <button type="button" class="linklike" data-consent-open>Настройки cookie</button>
+      </nav>
+      <p class="muted">© {{ site.year }} {{ site.name }} · Данные обновлены {{ tariffs.updated_at | ruDate }}</p>
+    </div>
+  </footer>
+
+  <section class="consent" id="consent" role="region" aria-labelledby="consent-title" hidden>
+    <div class="wrap consent__in">
+      <div class="consent__text">
+        <h2 id="consent-title" class="consent__title">Cookie и статистика</h2>
+        <p>Мы хотим подключить Яндекс.Метрику, чтобы понимать, какие регионы и суммы ищут посетители. Она использует cookie и получает технические данные о вашем визите. Без вашего согласия Метрика не загружается, а калькулятор работает полностью. <a href="{{ '/politika/' | url }}">Подробнее в политике</a>.</p>
+      </div>
+      <div class="consent__actions">
+        <button type="button" class="btn btn--consent" data-consent="granted">Принять</button>
+        <button type="button" class="btn btn--consent" data-consent="denied">Отклонить</button>
+      </div>
+    </div>
+  </section>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

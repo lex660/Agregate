@@ -1,0 +1,18 @@
+---
+title: "Исламская рассрочка — сравнить условия в Ингушетии, Дагестане и Чечне"
+description: "Честное сравнение исламской рассрочки (мурабаха) без процентов. Посчитайте платёж и наценку у Tasnim, КупиТак, Al-Baraka, LaRiba, Ватан, FinCity и перейдите на сайт выбранной компании."
+preRegion: ingushetiya
+---
+{% extends "base.njk" %}
+{% block content %}
+<div class="wrap">
+  <section class="hero">
+    <h1>Сравните исламскую рассрочку</h1>
+    <p class="lead">Платёж, наценка и итоговая стоимость у всех компаний региона — на одном экране. Выберите лучшее и оформите заявку на сайте компании.</p>
+  </section>
+  <div class="layout">
+    {% include "calculator.njk" %}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script type="module" src="{{ '/assets/js/app.js' | url }}?v={{ site.buildDate }}"></script>{% endblock %}
