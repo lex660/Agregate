@@ -17,7 +17,8 @@
   <meta name="theme-color" content="#0f5c4a">
   <link rel="icon" href="{{ '/assets/img/icon.svg' | url }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ '/assets/css/site.css' | url }}?v={{ site.buildDate }}">
-  <script src="{{ '/assets/js/metrika.js' | url }}" data-counter="{{ site.metrikaId }}" defer></script>
+  {#- Метрика загружается только после согласия: см. consent.js и блок #consent ниже -#}
+  <script src="{{ '/assets/js/consent.js' | url }}?v={{ site.buildDate }}" data-counter="{{ site.metrikaId }}" defer></script>
   {% if jsonld %}<script type="application/ld+json">{{ jsonld | json | safe }}</script>{% endif %}
 </head>
 <body>
@@ -42,10 +43,25 @@
         <a href="{{ '/o-proekte/' | url }}">Как мы считаем</a>
         <a href="{{ '/kompanii/' | url }}">Компании и источники</a>
         <a href="{{ '/reklama/' | url }}">Реклама на сайте</a>
+        <a href="{{ '/politika/' | url }}">Политика обработки персональных данных</a>
+        <button type="button" class="linklike" data-consent-open>Настройки cookie</button>
       </nav>
       <p class="muted">© {{ site.year }} {{ site.name }} · Данные обновлены {{ tariffs.updated_at | ruDate }}</p>
     </div>
   </footer>
+
+  <section class="consent" id="consent" role="region" aria-labelledby="consent-title" hidden>
+    <div class="wrap consent__in">
+      <div class="consent__text">
+        <h2 id="consent-title" class="consent__title">Cookie и статистика</h2>
+        <p>Мы хотим подключить Яндекс.Метрику, чтобы понимать, какие регионы и суммы ищут посетители. Она использует cookie и получает технические данные о вашем визите. Без вашего согласия Метрика не загружается, а калькулятор работает полностью. <a href="{{ '/politika/' | url }}">Подробнее в политике</a>.</p>
+      </div>
+      <div class="consent__actions">
+        <button type="button" class="btn btn--consent" data-consent="granted">Принять</button>
+        <button type="button" class="btn btn--consent" data-consent="denied">Отклонить</button>
+      </div>
+    </div>
+  </section>
   {% block scripts %}{% endblock %}
 </body>
 </html>

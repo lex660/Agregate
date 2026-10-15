@@ -124,3 +124,15 @@ h3 { font-size: 1.05rem; }
 .footer { border-top: 1px solid var(--line); padding: 20px 0 32px; background: var(--surface); }
 .disclaimer { font-size: .85rem; color: var(--muted); max-width: 80ch; }
 .footer__nav { display: flex; gap: 16px; flex-wrap: wrap; margin: 10px 0; }
+
+/* Согласие на cookie. Кнопки «Принять» и «Отклонить» намеренно одинаковые по виду (issue #5). */
+.consent { position: sticky; bottom: 0; z-index: 20; background: var(--surface); border-top: 1px solid var(--line); box-shadow: 0 -6px 20px rgba(23, 35, 31, .08); }
+.consent__in { display: flex; gap: 12px 20px; align-items: center; flex-wrap: wrap; padding-top: 14px; padding-bottom: 14px; }
+.consent__text { flex: 1 1 420px; }
+.consent__title { font-size: 1rem; margin: 0 0 4px; }
+.consent__text p { margin: 0; font-size: .9rem; color: var(--muted); }
+.consent__actions { display: flex; gap: 8px; flex: 1 1 260px; }
+.btn--consent { flex: 1 1 0; background: var(--surface); color: var(--ink); border-color: var(--ink); }
+.btn--consent:hover { background: var(--brand-soft); }
+.btn--consent:focus-visible, .linklike:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.linklike { font: inherit; background: none; border: 0; padding: 0; color: var(--brand); text-decoration: underline; cursor: pointer; }

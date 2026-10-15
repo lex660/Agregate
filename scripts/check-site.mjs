@@ -9,7 +9,7 @@ const errors = [];
 const warn = [];
 
 const companyHosts = data.companies.filter((c) => c.url).map((c) => new URL(c.url).hostname);
-const ALLOWED = new Set([...companyHosts, "wa.me", "mc.yandex.ru", "mc.yandex.com", "yastatic.net"]);
+const ALLOWED = new Set([...companyHosts, "wa.me", "yandex.ru", "mc.yandex.ru", "mc.yandex.com", "yastatic.net"]);
 const FORBIDDEN = [/vsay-rassrochka/i, /workers\.dev/i, /googletagmanager/i, /google-analytics/i, /gtag\(/];
 
 function walk(dir) {
@@ -32,6 +32,10 @@ for (const f of pages) {
   if (!s.includes('http-equiv="Content-Security-Policy"')) errors.push(`${f}: нет CSP`);
   if (!s.includes('class="disclaimer"')) errors.push(`${f}: нет дисклеймера`);
   if (!/<title>[^<]{10,}<\/title>/.test(s)) errors.push(`${f}: пустой title`);
+  // 152-ФЗ (issues #5, #6): Метрика только через consent.js, баннер согласия и ссылка на политику на каждой странице.
+  if (/mc\.yandex\.(ru|com)\/metrika/.test(s) || /metrika\.js/.test(s)) errors.push(`${f}: Метрика подключена напрямую, в обход согласия`);
+  if (!s.includes('id="consent"')) errors.push(`${f}: нет баннера согласия на cookie`);
+  if (!/href="[^"]*\/politika\/"/.test(s)) errors.push(`${f}: нет ссылки на политику обработки персональных данных`);
   for (const m of s.matchAll(/<a\b[^>]*href="(https?:[^"]+)"[^>]*>/g)) {
     const tag = m[0];
     const u = new URL(m[1].replace(/&amp;/g, "&"));
@@ -52,6 +56,9 @@ for (const m of sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)) {
   const path = new URL(m[1]).pathname.replace(/^\/Agregate/, "");
   if (!existsSync(join(OUT, path, "index.html"))) errors.push(`sitemap: нет страницы ${path}`);
 }
+
+const site = (await import("../src/_data/site.js")).default;
+if (!site.operator?.name) warn.push("Политика ПДн: не указан оператор (ФИО или наименование) — src/_data/site.js, operator.name");
 
 const today = new Date();
 for (const c of data.companies) {

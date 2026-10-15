@@ -9,6 +9,15 @@ export default {
   pathPrefix: new URL(url).pathname.replace(/\/$/, ""),
   metrikaId: 104202450,
   adsContact: "https://wa.me/79261380676",
+  // Оператор персональных данных для страницы /politika/ (issue #6).
+  // ФИО или наименование и ИНН заполняет владелец сайта. Пока поля пустые,
+  // страница называет оператора «владелец сайта», а npm run check выводит предупреждение.
+  operator: {
+    name: "",
+    inn: "",
+    contact: "https://wa.me/79261380676",
+  },
+  policyDate: "2026-10-15",
   year: new Date().getFullYear(),
   buildDate: new Date().toISOString().slice(0, 10),
 };
