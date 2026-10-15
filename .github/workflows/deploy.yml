@@ -1,9 +1,9 @@
 name: Проверка и публикация
 
+# Публикация из main. Проверка PR — в ci.yml.
 on:
   push:
     branches: [main]
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -22,18 +22,18 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Линтер
+        run: npm run lint
       - name: Тесты расчёта на эталонах
         run: npm test
       - name: Сборка
         run: npm run build
-      - name: Проверка ссылок, CSP, дисклеймера, sitemap
+      - name: Проверка ссылок, CSP, дисклеймера, согласия, sitemap
         run: npm run check
       - uses: actions/upload-pages-artifact@v3
-        if: github.event_name != 'pull_request'
         with:
           path: _site
       - uses: actions/upload-artifact@v4
-        if: github.event_name != 'pull_request'
         with:
           name: site
           path: _site
@@ -42,7 +42,7 @@ jobs:
   # YC_ACCESS_KEY_ID, YC_SECRET_ACCESS_KEY и переменная YC_BUCKET (см. РУКОВОДСТВО.md).
   deploy-yandex:
     needs: build
-    if: github.event_name != 'pull_request' && vars.YC_BUCKET != ''
+    if: vars.YC_BUCKET != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -64,7 +64,7 @@ jobs:
   # Временный хостинг, пока не настроен Yandex Object Storage.
   deploy-pages:
     needs: build
-    if: github.event_name != 'pull_request' && vars.YC_BUCKET == ''
+    if: vars.YC_BUCKET == ''
     runs-on: ubuntu-latest
     permissions:
       pages: write

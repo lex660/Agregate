@@ -21,7 +21,7 @@ function floorTo(value, step) {
 }
 
 export function formatRub(n) {
-  return Math.round(n).toLocaleString("ru-RU").replace(/ /g, " ") + " ₽";
+  return Math.round(n).toLocaleString("ru-RU").replace(/\u00a0/g, " ") + " ₽";
 }
 
 // Минимальный и максимальный взнос по правилам тарифа.

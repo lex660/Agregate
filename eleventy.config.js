@@ -15,7 +15,7 @@ export default function (eleventyConfig) {
     const [y, m, d] = iso.split("-");
     return `${d}.${m}.${y}`;
   });
-  eleventyConfig.addFilter("rub", (n) => Math.round(n).toLocaleString("ru-RU").replace(/ /g, " ") + " ₽");
+  eleventyConfig.addFilter("rub", (n) => Math.round(n).toLocaleString("ru-RU").replace(/\u00a0/g, " ") + " ₽");
   eleventyConfig.addFilter("byRegion", (companies, regionId) => companies.filter((c) => c.regions.includes(regionId)));
   eleventyConfig.addFilter("activeAds", (ads) => ads.filter((a) => a.active && (!a.is_ad || (a.erid && a.advertiser))));
   eleventyConfig.addFilter("tariffsOf", (tariffs, companyId) => tariffs.filter((t) => t.company === companyId));

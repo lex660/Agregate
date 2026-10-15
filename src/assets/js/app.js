@@ -29,7 +29,7 @@ function goal(name, params) {
 
 // ---------- Ввод ----------
 const digits = (s) => Number(String(s).replace(/[^\d]/g, "")) || 0;
-const pretty = (n) => (n ? n.toLocaleString("ru-RU").replace(/ /g, " ") : "");
+const pretty = (n) => (n ? n.toLocaleString("ru-RU").replace(/\u00a0/g, " ") : "");
 
 function bindMoney(input) {
   input.addEventListener("input", () => {

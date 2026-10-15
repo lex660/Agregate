@@ -1,0 +1,33 @@
+name: CI
+
+# Проверка каждого PR и каждой ветки, кроме main (main проверяет и публикует deploy.yml).
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Линтер
+        run: npm run lint
+      - name: Тесты расчёта на эталонах
+        run: npm test
+      - name: Сборка
+        run: npm run build
+      - name: Проверка ссылок, CSP, дисклеймера, согласия, sitemap
+        run: npm run check

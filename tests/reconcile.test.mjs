@@ -55,3 +55,13 @@ test("Устаревшие проверки (больше 30 дней) попа�
   const s = staleCompanies(data, new Date("2026-12-01"));
   assert.ok(s.length >= 6);
 });
+
+test("Отчёт сверки: markdown-список и пометка о совпадении", async () => {
+  const { formatReport } = await import("../functions/reconcile/index.mjs");
+  const ok = formatReport({ ok: true, diffs: [], errors: [], stale: [] }, { markdown: true });
+  assert.match(ok, /совпадают/);
+  const bad = formatReport({ ok: false, diffs: ["LaRiba Супер: у нас 3.8%/мес, на сайте 4.2%"], errors: ["vatan: не удалось прочитать"], stale: [] }, { markdown: true });
+  assert.match(bad, /^- LaRiba Супер/m);
+  assert.match(bad, /^- vatan/m);
+  assert.doesNotMatch(bad, /совпадают/);
+});

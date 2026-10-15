@@ -41,10 +41,9 @@ async function telegram(text) {
   if (!res.ok) console.error("Telegram:", res.status, await res.text());
 }
 
-export async function run() {
-  const tariffsUrl = process.env.TARIFFS_URL || "https://raw.githubusercontent.com/lex660/Agregate/main/data/tariffs.json";
-  const data = JSON.parse(await get(tariffsUrl));
-
+// Сверка без отправки уведомлений: читает сайты компаний и сравнивает с переданными данными.
+// Используется и функцией в Yandex Cloud, и плановым workflow в GitHub Actions (scripts/reconcile.mjs).
+export async function reconcile(data) {
   const parsers = {
     tasnim: [SOURCES.tasnim, parseTasnim],
     kupitak: [SOURCES.kupitak, parseKupitak],
@@ -64,17 +63,26 @@ export async function run() {
 
   const diffs = compareAll(data, site);
   const stale = staleCompanies(data);
-  const ok = !diffs.length && !errors.length;
+  return { ok: !diffs.length && !errors.length, diffs, errors, stale };
+}
 
+export function formatReport({ ok, diffs, errors, stale }, { markdown = false } = {}) {
+  const item = (d) => (markdown ? "- " : "• ") + d;
   const lines = [];
-  if (diffs.length) lines.push("⚠️ Условия на сайтах изменились:", ...diffs.map((d) => "• " + d), "");
-  if (errors.length) lines.push("❌ Сверка не прошла:", ...errors.map((d) => "• " + d), "");
-  if (stale.length) lines.push("🕒 Давно не проверялись:", ...stale.map((d) => "• " + d), "");
-  if (ok) lines.unshift("✅ Тарифы на сайтах совпадают с tariffs.json.");
+  if (ok) lines.push("✅ Тарифы на сайтах совпадают с tariffs.json.", "");
+  if (diffs.length) lines.push("⚠️ Условия на сайтах изменились:", ...diffs.map(item), "");
+  if (errors.length) lines.push("❌ Сверка не прошла:", ...errors.map(item), "");
+  if (stale.length) lines.push("🕒 Давно не проверялись:", ...stale.map(item), "");
   lines.push("Изменения в tariffs.json вносятся только через PR с новыми checkedAt и source.");
+  return lines.join("\n");
+}
 
-  if (!ok || stale.length || process.env.SEND_OK === "1") await telegram(lines.join("\n"));
-  return { ok, diffs, errors, stale };
+export async function run() {
+  const tariffsUrl = process.env.TARIFFS_URL || "https://raw.githubusercontent.com/lex660/Agregate/main/data/tariffs.json";
+  const data = JSON.parse(await get(tariffsUrl));
+  const result = await reconcile(data);
+  if (!result.ok || result.stale.length || process.env.SEND_OK === "1") await telegram(formatReport(result));
+  return result;
 }
 
 // Точка входа Yandex Cloud Functions: index.handler
